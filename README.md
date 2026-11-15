@@ -1,6 +1,6 @@
 # lucjoosten.nl
 
-Luc Joosten’s engineering portfolio. Phase 1 implements the approved Portfolio V2 homepage with React 19, TypeScript, Vite, Tailwind v4 and React Router. No backend or deployment is included.
+Luc Joosten’s engineering portfolio. Phase 1 implements the approved Portfolio V2 homepage with React 19, TypeScript, Vite, Tailwind v4 and React Router. No backend is required. Production runs on Vercel at [lucjoosten.nl](https://lucjoosten.nl).
 
 ## Local development
 
@@ -40,7 +40,7 @@ Homepage links use anchors intentionally. Full project, experience, about, writi
 
 `pnpm build` generates static HTML for `/` and `/404.html` with React’s server renderer, then hydrates in the browser. Fonts are self-hosted. Theme preference initializes before paint, persists when storage is available, and otherwise follows the OS until explicitly changed. No analytics, tracking, external font service or secret configuration is required.
 
-Vercel configuration is prepared for a future approved deployment: install `pnpm install --frozen-lockfile`, build `pnpm build`, output `dist`. It serves existing static files and a real HTTP 404 for unknown paths. Local Vite preview uses SPA fallback; tests verify its rendered not-found UI, not Vercel routing. The public repository is `lhajoosten/lucjoosten.nl`. No deployment or DNS change has occurred.
+Vercel uses the following configuration: install `pnpm install --frozen-lockfile`, build `pnpm build`, output `dist`. It serves existing static files and a real HTTP 404 for unknown paths. Local Vite preview uses SPA fallback; the browser suite verifies its rendered not-found UI. Production HTTP checks separately verify Vercel routing. The public repository is `lhajoosten/lucjoosten.nl`. The owner approved production publication on 2026-11-15; GoDaddy manages DNS.
 
 The provided Git directory is read-only and resolves to a parent workspace repository. An isolated writable checkout is used to push this implementation to the new repository; a normal clone of that repository has standard Git behavior.
 
@@ -49,3 +49,11 @@ The provided Git directory is read-only and resolves to a parent workspace repos
 Phase 2 adds curated case studies and secondary pages, then Phase 3 introduces validated Markdown/MDX, draft exclusion, feeds and content routes. Phase 4 adds explicit source allowlists and reviewed agent publishing instructions. Scheduled automation is deferred. Before publication, all content changes require a reviewed PR and deployment requires explicit owner approval.
 
 Known limits: automated axe checks do not replace assistive-technology testing; no Safari/Firefox test matrix is configured yet. No social preview image, RSS, sitemap, full content schemas or agent collection pipeline is included in Phase 1. With JavaScript disabled the homepage and external links remain readable; theme controls, project dialogs and the mobile menu require JavaScript.
+
+## Production verification — 2026-11-15
+
+The owner explicitly approved enabling commit `6e14b18e24a13fd67646bd101992f59d48541240`. Vercel project `lucjoosten-nl` in team `lhajoosten-dev` serves that build at `https://lucjoosten.nl/`; `www` redirects there with HTTP 308. The production deployment is `dpl_89PdmywWvGd3KvfGoGAGQV3oaztG`. PR #1 remains open; enabling the approved deployment did not merge it.
+
+Verified public HTTPS responses: homepage, JavaScript and CSS return 200; an unknown URL returns the custom page with HTTP 404. Live Chromium smoke tests passed at 1440px and 390px, covering hydration, theme persistence, project dialogs, responsive width, mobile navigation and no page errors. The recent 15-minute Vercel error/fatal runtime-log query returned no entries. No external log drains are configured; these checks are a point-in-time verification rather than continuous monitoring. GitHub's Quality workflow also passed for the approved commit.
+
+Both domains report valid DNS configuration in Vercel. Preserve unrelated GoDaddy DNS records, especially email records. Any later production deployment still requires explicit owner approval.

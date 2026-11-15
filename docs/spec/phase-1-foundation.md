@@ -28,7 +28,7 @@ The provided `.git` directory is read-only and Git resolves to the parent worksp
 
 ## Verified implementation — 2026-11-15
 
-The homepage, shared layout, tokens, theme handling, project overview dialogs, not-found view, prerendering, quality workflow and engineering instructions are implemented locally. The initial review branch is pushed using the isolated checkout described above. No remote CI or production deployment was executed.
+The homepage, shared layout, tokens, theme handling, project overview dialogs, not-found view, prerendering, quality workflow and engineering instructions are implemented locally. The initial review branch is pushed using the isolated checkout described above. At initial local verification, no remote CI or production deployment had been executed. The owner subsequently approved production publication; see the production verification record in `README.md` for the approved commit and executed live checks.
 
 Executed on Node 26.13.0 with pnpm 12.14.0:
 
