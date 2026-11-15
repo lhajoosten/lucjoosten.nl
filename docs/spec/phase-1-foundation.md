@@ -1,6 +1,6 @@
 # Phase 1 — portfolio foundation
 
-Status: implementation approved by the project handoff. Deployment requires separate explicit approval.
+Status: Phase 1 is implemented, merged through PR #1 and live as of 2026-11-15. Later production deployments require separate explicit approval. Phase 2 implementation is not yet authorized.
 
 ## Scope and acceptance
 
@@ -22,15 +22,15 @@ Use the owner's supplied current professional positioning. Archived copy is hist
 
 Full project case studies, secondary profile pages, Markdown/MDX, Zod schemas, feeds and publishing agents belong to later phases. Use homepage anchors until those routes exist. No automated collection, authentication, backend, database, contact form, analytics or deployment. No Cursor files.
 
-## Workspace limitation
+## Workspace
 
-The provided `.git` directory is read-only and Git resolves to the parent workspace repository. Build an independently installable project here; leave parent Git state and sibling projects untouched. The owner subsequently authorized pushing the implementation. A new public `lhajoosten/lucjoosten.nl` repository and an isolated writable checkout are used for the initial review branch. The provided `.git` mount remains unchanged.
+The initial parent-repository limitation is resolved. This workspace now has its own Git metadata for the public `lhajoosten/lucjoosten.nl` repository; the temporary publishing checkout used for the initial review branch is no longer needed. Sandbox permissions may still require escalation for Git writes. Leave sibling projects and the archived reference repository untouched.
 
 ## Verified implementation — 2026-11-15
 
-The homepage, shared layout, tokens, theme handling, project overview dialogs, not-found view, prerendering, quality workflow and engineering instructions are implemented locally. The initial review branch is pushed using the isolated checkout described above. At initial local verification, no remote CI or production deployment had been executed. The owner subsequently approved production publication; see the production verification record in `README.md` for the approved commit and executed live checks.
+The homepage, shared layout, tokens, theme handling, project overview dialogs, not-found view, prerendering, quality workflow and engineering instructions are implemented. The owner merged [PR #1](https://github.com/lhajoosten/lucjoosten.nl/pull/1) as `00a0a4336ca10643d47757ca1e5d0c6d4f40b617`; its Quality workflow passed and Vercel serves that commit in production. See the [production verification record](../../README.md#production-verification--2026-11-15) for deployment details and the distinction between current status checks and earlier live tests.
 
-Executed on Node 26.13.0 with pnpm 12.14.0:
+The following implementation checks were executed on Node 26.13.0 with pnpm 12.14.0 during Phase 1; they were not rerun for this documentation update:
 
 - `pnpm check`: formatting, Oxlint, strict TypeScript and all 6 component/unit tests passed.
 - `pnpm build`: passed; generated static homepage and 404 HTML.
