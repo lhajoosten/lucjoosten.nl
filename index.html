@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#f6f5f1" />
+    <title>Luc Joosten — Software Engineer | AI & Full-Stack</title>
+    <meta
+      name="description"
+      content="Luc Joosten, software engineer in the Netherlands specializing in AI engineering and full-stack development. Building AI-powered applications at Crowe Netherlands."
+    />
+    <meta property="og:title" content="Luc Joosten — Software Engineer" />
+    <meta
+      property="og:description"
+      content="AI engineering and full-stack development. Software built to hold up."
+    />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://lucjoosten.nl/" />
+    <link rel="canonical" href="https://lucjoosten.nl/" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <script>
+      (() => {
+        let theme;
+        try {
+          theme = localStorage.getItem('lucjoosten.theme');
+        } catch {}
+        const dark =
+          theme === 'dark' ||
+          (theme !== 'light' && matchMedia('(prefers-color-scheme: dark)').matches);
+        document.documentElement.dataset.theme = dark ? 'dark' : 'light';
+        document.querySelector('meta[name="theme-color"]').content = dark ? '#11171a' : '#f6f5f1';
+      })();
+    </script>
+  </head>
+  <body>
+    <div id="root"><!--app-html--></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
