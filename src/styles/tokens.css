@@ -1,0 +1,47 @@
+:root {
+  color-scheme: light;
+  --bg: #f6f5f1;
+  --ink: #131616;
+  --muted: #626763;
+  --line: #d9dad6;
+  --blue: #2f6e9c;
+  --blue-soft: #e0edf4;
+  --panel: #efefeb;
+  --card: #fbfbf8;
+  --button-blue: #286d9c;
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --space-12: 48px;
+  --space-18: 72px;
+  --space-27: 108px;
+  --radius-round: 999px;
+  --border-fine: 1px;
+  --duration: 180ms;
+}
+html[data-theme='dark'] {
+  color-scheme: dark;
+  --bg: #11171a;
+  --ink: #f1f3f1;
+  --muted: #a2b0b4;
+  --line: #324047;
+  --blue: #7bb9df;
+  --blue-soft: #213643;
+  --panel: #172126;
+  --card: #1a252b;
+}
+@theme inline {
+  --color-paper: var(--bg);
+  --color-ink: var(--ink);
+  --color-muted: var(--muted);
+  --color-accent: var(--blue);
+  --color-line: var(--line);
+  --color-panel: var(--panel);
+  --color-card: var(--card);
+  --font-sans: 'DM Sans', Arial, sans-serif;
+  --font-mono: 'DM Mono', monospace;
+  --radius-pill: var(--radius-round);
+}
