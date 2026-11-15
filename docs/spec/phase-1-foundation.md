@@ -1,6 +1,6 @@
 # Phase 1 — portfolio foundation
 
-Status: Phase 1 is implemented, merged through PR #1 and live as of 2026-11-15. Later production deployments require separate explicit approval. Phase 2 implementation is not yet authorized.
+Status: Phase 1 is implemented, merged through PR #1 and live as of 2026-11-15. Later production deployments require separate explicit approval. The first Phase 2 slice is separately authorized in [the projects spec](phase-2-projects.md).
 
 ## Scope and acceptance
 

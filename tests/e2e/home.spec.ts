@@ -84,7 +84,7 @@ test('project dialog traps and restores focus and respects repository visibility
   const close = page.getByRole('button', { name: 'Close project details' });
   await expect(close).toBeFocused();
   await page.keyboard.press('Shift+Tab');
-  await expect(dialog.getByRole('link')).toBeFocused();
+  await expect(dialog.getByRole('link', { name: 'Read the project README' })).toBeFocused();
   expect((await new AxeBuilder({ page }).analyze()).violations).toEqual([]);
   await page.keyboard.press('Escape');
   await expect(dialog).not.toBeVisible();

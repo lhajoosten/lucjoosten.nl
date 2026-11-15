@@ -1,23 +1,26 @@
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import { Link, Route, Routes, useLocation } from 'react-router';
 import { Header } from '../components/Header';
 import { HomePage } from './HomePage';
+import { ProjectsPage } from './ProjectsPage';
+import { ReleaseLogPage } from './ReleaseLogPage';
+import { updateMetadata } from './metadata';
 
 const currentYear = new Date().getFullYear();
 
 export function App() {
-  const { pathname } = useLocation();
-  const isHome = pathname === '/';
+  const { pathname, hash } = useLocation();
+  const previousPath = useRef(pathname);
   useEffect(() => {
-    document.title = isHome
-      ? 'Luc Joosten — Software Engineer | AI & Full-Stack'
-      : 'Page not found — Luc Joosten';
-    const canonical = document.querySelector('link[rel="canonical"]');
-    if (canonical) {
-      if (isHome) canonical.setAttribute('href', 'https://lucjoosten.nl/');
-      else canonical.removeAttribute('href');
+    updateMetadata(pathname);
+    if (previousPath.current !== pathname && !hash) {
+      const heading = document.querySelector<HTMLElement>('main h1');
+      heading?.setAttribute('tabindex', '-1');
+      heading?.focus({ preventScroll: true });
+      window.scrollTo(0, 0);
     }
-  }, [isHome]);
+    previousPath.current = pathname;
+  }, [pathname, hash]);
   return (
     <>
       <a className="skip-link" href="#main-content">
@@ -26,7 +29,9 @@ export function App() {
       <Header key={pathname} />
       <main id="main-content" tabIndex={-1}>
         <Routes>
-          <Route path="/" element={<HomePage />} />
+          <Route caseSensitive path="/" element={<HomePage />} />
+          <Route caseSensitive path="/projects" element={<ProjectsPage />} />
+          <Route caseSensitive path="/projects/release-log" element={<ReleaseLogPage />} />
           <Route
             path="*"
             element={

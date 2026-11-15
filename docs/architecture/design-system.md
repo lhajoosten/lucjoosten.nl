@@ -15,3 +15,9 @@ Tokens live in `src/styles/tokens.css` and are exposed through Tailwind's `@them
 - Interaction: 180ms transitions and small hover translations, disabled with smooth scrolling under reduced motion. Touch controls are at least 44px. Mobile navigation is a disclosure with Escape dismissal and focus restoration. Project summaries use native modal dialogs.
 
 Intentional changes from the prototype: accessible contrast for small blue text, larger utility targets, visible keyboard focus and skip link; unverified graduation dates and experience history omitted; private ReviewBot summary withheld; public project summaries use current READMEs; writing has an honest empty state until approved articles exist.
+
+## Project pages — Phase 2 slice 1
+
+The projects index reuses the asymmetric card grid as semantic articles with explicit links, reviewed status and repository visibility. Homepage cards retain their native overview dialogs; the Release Log dialog adds a case-study link. The Projects header destination is `/projects`; other header destinations remain homepage anchors.
+
+The case-study layout pairs an editorial title and project diagram, then a section navigation column and reading column capped at 720px. On mobile these stack into one column. Source attribution links to a pinned public README and records its review date. Reuse existing light/dark, focus and reduced-motion tokens. Client page transitions focus the destination heading; ordinary homepage and case-study anchors preserve native navigation.
