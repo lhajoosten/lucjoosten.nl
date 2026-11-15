@@ -6,6 +6,7 @@
   "outputDirectory": "dist",
   "routes": [
     { "handle": "filesystem" },
+    { "src": "/about/?", "dest": "/about/index.html" },
     { "src": "/projects/?", "dest": "/projects/index.html" },
     { "src": "/projects/release-log/?", "dest": "/projects/release-log/index.html" },
     { "src": "/.*", "dest": "/404.html", "status": 404 }

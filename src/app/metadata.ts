@@ -8,6 +8,12 @@ export type PageMetadata = {
 
 export const pages: readonly PageMetadata[] = [
   {
+    path: '/about',
+    title: 'About — Luc Joosten',
+    description:
+      'Meet Luc Joosten: a software engineer in the Netherlands connecting full-stack development, AI integration and practical engineering principles.',
+  },
+  {
     path: '/',
     title: 'Luc Joosten — Software Engineer | AI & Full-Stack',
     description:

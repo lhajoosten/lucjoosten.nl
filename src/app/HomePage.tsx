@@ -1,5 +1,5 @@
 import { Link } from 'react-router';
-import { focusAreas, profiles } from '../content/home';
+import { focusAreas, profiles, positioning } from '../content/profile';
 import { Projects } from '../components/Projects';
 
 export function HomePage() {
@@ -95,15 +95,11 @@ export function HomePage() {
         <div className="work-grid">
           <div>
             <h3>
-              Full-stack by foundation.
+              {positioning.heading}
               <br />
-              <span className="muted">AI-focused by practice.</span>
+              <span className="muted">{positioning.emphasis}</span>
             </h3>
-            <p>
-              My work connects application architecture, user experience, data systems, and AI
-              integration. I prefer practical solutions with clear boundaries, sound testing, and
-              observable behavior over complexity for its own sake.
-            </p>
+            <p>{positioning.approach}</p>
             <a className="small-link" href={profiles.github} target="_blank" rel="noreferrer">
               Explore my GitHub <span aria-hidden="true">↗</span>
             </a>
@@ -112,22 +108,22 @@ export function HomePage() {
             <p className="mono muted">Current engineering work</p>
             <ul className="experience-list">
               <li>
-                <strong>Software Engineer</strong>
-                <span>Crowe Netherlands</span>
+                <strong>{positioning.role}</strong>
+                <span>{positioning.employer}</span>
               </li>
               <li>
                 <strong>Product focus</strong>
-                <span>CynthAI</span>
+                <span>{positioning.product}</span>
               </li>
               <li>
                 <strong>Domain</strong>
-                <span>Accountancy & financial services</span>
+                <span>{positioning.domain}</span>
               </li>
             </ul>
-            <p className="experience-copy">
-              At Crowe Netherlands, I work on CynthAI, building AI-powered applications for
-              accountancy and financial services.
-            </p>
+            <Link className="small-link" to="/about">
+              More about my work <span aria-hidden="true">→</span>
+            </Link>
+            <p className="experience-copy">{positioning.currentWork}</p>
           </div>
         </div>
       </section>

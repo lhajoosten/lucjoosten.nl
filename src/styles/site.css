@@ -99,7 +99,7 @@
   .nav {
     display: flex;
     align-items: center;
-    gap: 29px;
+    gap: clamp(12px, 1.8vw, 26px);
   }
   .nav a {
     display: inline-flex;
@@ -651,6 +651,50 @@
     margin-top: var(--space-4);
     overflow-wrap: anywhere;
   }
+  .about-work {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: var(--space-18);
+    border-top: 1px solid var(--line);
+    padding-top: var(--space-12);
+  }
+  .about-page h2:not(.section-head h2) {
+    font-size: clamp(30px, 3.3vw, 48px);
+    font-weight: 700;
+    letter-spacing: -0.05em;
+    line-height: 1.1;
+    margin-block: var(--space-6);
+  }
+  .about-work p:not(.mono),
+  .about-connect > p:not(.mono) {
+    color: var(--muted);
+    line-height: 1.85;
+    margin-bottom: var(--space-6);
+    max-width: 580px;
+  }
+  .about-current dl {
+    margin-block: var(--space-6);
+  }
+  .about-current dl > div {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 2fr);
+    gap: var(--space-4);
+    padding-block: var(--space-4);
+    border-top: 1px solid var(--line);
+    font-size: 14px;
+  }
+  .about-current dd {
+    margin: 0;
+    color: var(--muted);
+  }
+  .about-focus,
+  .about-connect {
+    margin-top: var(--space-18);
+  }
+  .about-connect {
+    border-top: 1px solid var(--line);
+    padding-top: var(--space-12);
+  }
   .not-found {
     padding-block: var(--space-27);
     min-height: 65vh;
@@ -707,22 +751,7 @@
     gap: 24px;
   }
 }
-@media (max-width: 650px) {
-  .case-intro,
-  .case-body {
-    grid-template-columns: minmax(0, 1fr);
-    gap: var(--space-8);
-  }
-  .case-visual {
-    margin-bottom: var(--space-8);
-  }
-  .case-visual svg {
-    max-height: 160px;
-  }
-
-  .topbar {
-    height: 70px;
-  }
+@media (max-width: 850px) {
   .nav {
     display: none;
   }
@@ -746,6 +775,28 @@
     font-size: 12px;
     text-transform: uppercase;
     letter-spacing: 0.1em;
+  }
+}
+@media (max-width: 650px) {
+  .about-work {
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--space-12);
+  }
+
+  .case-intro,
+  .case-body {
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--space-8);
+  }
+  .case-visual {
+    margin-bottom: var(--space-8);
+  }
+  .case-visual svg {
+    max-height: 160px;
+  }
+
+  .topbar {
+    height: 70px;
   }
   .hero {
     min-height: unset;

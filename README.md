@@ -1,6 +1,6 @@
 # lucjoosten.nl
 
-Luc Joosten’s engineering portfolio. The foundation implements the approved Portfolio V2 homepage with React 19, TypeScript, Vite, Tailwind v4 and React Router. Phase 2 slice 1 adds a projects index and a Release Log case study. No backend is required. Production runs on Vercel at [lucjoosten.nl](https://lucjoosten.nl).
+Luc Joosten’s engineering portfolio. The foundation implements the approved Portfolio V2 homepage with React 19, TypeScript, Vite, Tailwind v4 and React Router. Phase 2 adds a projects index, a Release Log case study and an About page. No backend is required. Production runs on Vercel at [lucjoosten.nl](https://lucjoosten.nl).
 
 ## Local development
 
@@ -25,9 +25,10 @@ pnpm preview
 
 ## Structure and design
 
-- `src/app`: routing, shared page shell and homepage.
+- `src/app`: routing, shared page shell, homepage, project pages and About page.
 - `src/components`: theme control, navigation, project diagrams and native dialogs.
-- `src/content/home.ts`: reviewed homepage copy and navigation.
+- `src/content/home.ts`: navigation.
+- `src/content/profile.ts`: approved positioning, current role, technical focus and profile links shared by home/About.
 - `src/content/projects.ts`: shared reviewed project summaries and visibility.
 - `src/content/release-log.ts`: curated case-study copy and pinned README provenance.
 - `src/app/metadata.ts`: explicit page list and metadata for prerendering and client navigation.
@@ -35,16 +36,17 @@ pnpm preview
 - `docs/engineering/lucjoosten-portfolio-v2.html`: unchanged approved prototype, kept local and untracked.
 - `docs/spec/phase-1-foundation.md`: historical foundation scope and acceptance.
 - `docs/spec/phase-2-projects.md`: approved first Phase 2 slice and acceptance.
+- `docs/spec/phase-2-about.md`: approved About page scope and acceptance.
 - `docs/architecture/design-system.md`: visual and interaction contract.
 - `docs/adr/0001-static-react-foundation.md`: architecture and archived-repository inspection.
 
-Projects navigation opens `/projects`; Release Log has a case study at `/projects/release-log`. Homepage cards retain their overview dialogs. Other header links intentionally target homepage anchors. Other case studies and full experience, about, writing and contact routes remain later milestones. Unknown routes, including unknown project slugs, show a not-found view. No articles are published yet. Release Log and Azure AI Workbench summaries reflect their public READMEs; those repositories’ tests were not executed here. ReviewBot has no source link or implementation claims because it is private.
+Projects navigation opens `/projects`; Release Log has a case study at `/projects/release-log`. Homepage cards retain their overview dialogs. About navigation opens `/about`; Experience, Expertise, Writing and Contact retain homepage anchors. Other case studies and full experience, writing and contact routes remain later milestones. Unknown routes, including unknown project slugs, show a not-found view. No articles are published yet. Release Log and Azure AI Workbench summaries reflect their public READMEs; those repositories’ tests were not executed here. ReviewBot has no source link or implementation claims because it is private.
 
 ## Build and hosting
 
-`pnpm build` generates static HTML for `/`, `/projects`, `/projects/release-log` and `/404.html` with React’s server renderer, then hydrates in the browser. The project pages are emitted as directory index documents. Every valid page has a title, description, canonical URL and Open Graph metadata in its initial HTML and after client navigation. Unknown client routes clear valid-page metadata and set noindex. Fonts are self-hosted. Theme preference initializes before paint, persists when storage is available, and otherwise follows the OS until explicitly changed. No analytics, tracking, external font service or secret configuration is required.
+`pnpm build` generates static HTML for `/`, `/about`, `/projects`, `/projects/release-log` and `/404.html` with React’s server renderer, then hydrates in the browser. The project pages are emitted as directory index documents. Every valid page has a title, description, canonical URL and Open Graph metadata in its initial HTML and after client navigation. Unknown client routes clear valid-page metadata and set noindex. Fonts are self-hosted. Theme preference initializes before paint, persists when storage is available, and otherwise follows the OS until explicitly changed. No analytics, tracking, external font service or secret configuration is required.
 
-Vercel uses the following configuration: install `pnpm install --frozen-lockfile`, build `pnpm build`, output `dist`. It serves existing static files and a real HTTP 404 for unknown paths. Explicit Vercel routes map the two project URLs to their generated documents before the 404 fallback. A small Vite preview hook serves the same project documents for direct loads; unknown URLs still use Vite’s SPA fallback. The browser suite verifies navigation, route metadata and no-JavaScript project content, but local preview does not prove Vercel HTTP status behavior. Check valid-route HTTP 200 and unknown-route HTTP 404 on an authorized hosted preview before merge. The public repository is `lhajoosten/lucjoosten.nl`. The owner approved production publication on 2026-11-15; GoDaddy manages DNS.
+Vercel uses the following configuration: install `pnpm install --frozen-lockfile`, build `pnpm build`, output `dist`. It serves existing static files and a real HTTP 404 for unknown paths. Explicit Vercel routes map the About and project URLs to their generated documents before the 404 fallback. A small Vite preview hook serves the same project documents for direct loads; unknown URLs still use Vite’s SPA fallback. The browser suite verifies navigation, route metadata and no-JavaScript project content, but local preview does not prove Vercel HTTP status behavior. Check valid-route HTTP 200 and unknown-route HTTP 404 on an authorized hosted preview before merge. The public repository is `lhajoosten/lucjoosten.nl`. The owner approved production publication on 2026-11-15; GoDaddy manages DNS.
 
 The workspace has its own Git metadata for `lhajoosten/lucjoosten.nl`. The initial parent-repository limitation is resolved; the temporary publishing checkout is no longer needed. Sandbox permissions may still require escalation for Git writes.
 

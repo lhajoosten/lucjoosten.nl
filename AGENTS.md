@@ -2,7 +2,7 @@
 
 ## Scope and decisions
 
-Read affected code, tests and current user changes before editing. Plan substantial work and agree its scope; work in small, verifiable increments. For project-route work, read `docs/spec/phase-2-projects.md`; its first slice is the approved implementation boundary. `docs/spec/phase-1-foundation.md` records the completed foundation. Record durable architecture changes in `docs/adr/` and update maintained documentation alongside code.
+Read affected code, tests and current user changes before editing. Plan substantial work and agree its scope; work in small, verifiable increments. For About work, read `docs/spec/phase-2-about.md`; for project routes, read `docs/spec/phase-2-projects.md`. These approved slices define the implementation boundary. `docs/spec/phase-1-foundation.md` records the completed foundation. Record durable architecture changes in `docs/adr/` and update maintained documentation alongside code.
 
 Use the existing package scripts and conventions. Keep TypeScript strict and maintain the separation between content, presentation and shared application layout. Prefer semantic HTML, accessible controls, visible focus and responsive layouts. Introduce abstractions or dependencies only for demonstrated requirements. Avoid unrelated refactoring.
 
