@@ -2,6 +2,7 @@ import { useEffect, useRef } from 'react';
 import { Link, Route, Routes, useLocation } from 'react-router';
 import { Header } from '../components/Header';
 import { HomePage } from './HomePage';
+import { AboutPage } from './AboutPage';
 import { ProjectsPage } from './ProjectsPage';
 import { ReleaseLogPage } from './ReleaseLogPage';
 import { updateMetadata } from './metadata';
@@ -30,6 +31,7 @@ export function App() {
       <main id="main-content" tabIndex={-1}>
         <Routes>
           <Route caseSensitive path="/" element={<HomePage />} />
+          <Route caseSensitive path="/about" element={<AboutPage />} />
           <Route caseSensitive path="/projects" element={<ProjectsPage />} />
           <Route caseSensitive path="/projects/release-log" element={<ReleaseLogPage />} />
           <Route

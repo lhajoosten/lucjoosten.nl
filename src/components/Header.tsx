@@ -7,7 +7,7 @@ export function Header() {
   const [open, setOpen] = useState(false);
   const menuButton = useRef<HTMLButtonElement>(null);
   useEffect(() => {
-    const media = matchMedia('(min-width: 651px)');
+    const media = matchMedia('(min-width: 851px)');
     const closeOnDesktop = () => {
       if (media.matches) setOpen(false);
     };
@@ -32,7 +32,7 @@ export function Header() {
         </a>
         <nav className="nav" aria-label="Main navigation">
           {navigation.map((item) =>
-            item.href === '/projects' ? (
+            !item.href.includes('#') ? (
               <Link key={item.label} to={item.href}>
                 {item.label}
               </Link>
@@ -66,7 +66,7 @@ export function Header() {
         hidden={!open}
       >
         {navigation.map((item) =>
-          item.href === '/projects' ? (
+          !item.href.includes('#') ? (
             <Link key={item.label} to={item.href} onClick={() => setOpen(false)}>
               {item.label}
             </Link>

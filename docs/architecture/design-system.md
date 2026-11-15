@@ -21,3 +21,7 @@ Intentional changes from the prototype: accessible contrast for small blue text,
 The projects index reuses the asymmetric card grid as semantic articles with explicit links, reviewed status and repository visibility. Homepage cards retain their native overview dialogs; the Release Log dialog adds a case-study link. The Projects header destination is `/projects`; other header destinations remain homepage anchors.
 
 The case-study layout pairs an editorial title and project diagram, then a section navigation column and reading column capped at 720px. On mobile these stack into one column. Source attribution links to a pinned public README and records its review date. Reuse existing light/dark, focus and reduced-motion tokens. Client page transitions focus the destination heading; ordinary homepage and case-study anchors preserve native navigation.
+
+## About page — Phase 2 slice 2
+
+The About page reuses editorial page headings, two-column work/approach sections, the technical-focus grid and contact actions. It uses owner-reviewed homepage content without adding career chronology or outcomes. Shared profile copy lives in `src/content/profile.ts`. The homepage adds a link to About while preserving its sections and anchors. The header exposes About in both menus; navigation changes to a disclosure at 850px to keep all six links usable, independently of the 650px page-layout breakpoint.
