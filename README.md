@@ -42,7 +42,7 @@ Homepage links use anchors intentionally. Full project, experience, about, writi
 
 Vercel uses the following configuration: install `pnpm install --frozen-lockfile`, build `pnpm build`, output `dist`. It serves existing static files and a real HTTP 404 for unknown paths. Local Vite preview uses SPA fallback; the browser suite verifies its rendered not-found UI. Production HTTP checks separately verify Vercel routing. The public repository is `lhajoosten/lucjoosten.nl`. The owner approved production publication on 2026-11-15; GoDaddy manages DNS.
 
-The provided Git directory is read-only and resolves to a parent workspace repository. An isolated writable checkout is used to push this implementation to the new repository; a normal clone of that repository has standard Git behavior.
+The workspace has its own Git metadata for `lhajoosten/lucjoosten.nl`. The initial parent-repository limitation is resolved; the temporary publishing checkout is no longer needed. Sandbox permissions may still require escalation for Git writes.
 
 ## Next milestones
 
@@ -52,8 +52,8 @@ Known limits: automated axe checks do not replace assistive-technology testing; 
 
 ## Production verification — 2026-11-15
 
-The owner explicitly approved enabling commit `6e14b18e24a13fd67646bd101992f59d48541240`. Vercel project `lucjoosten-nl` in team `lhajoosten-dev` serves that build at `https://lucjoosten.nl/`; `www` redirects there with HTTP 308. The production deployment is `dpl_89PdmywWvGd3KvfGoGAGQV3oaztG`. PR #1 remains open; enabling the approved deployment did not merge it.
+Phase 1 is merged and live. The owner merged [PR #1](https://github.com/lhajoosten/lucjoosten.nl/pull/1) as commit `00a0a4336ca10643d47757ca1e5d0c6d4f40b617`. On 2026-11-15, Vercel resolved `https://lucjoosten.nl/` to production deployment `dpl_5PyQuUGHP2C1MiQ9XycUuUZJ9Wwm`, READY at that merge commit in project `lucjoosten-nl`, team `lhajoosten-dev`. The Git integration deployed the merge; pushes or merges to `main` affect production. The [Quality workflow for the merge commit](https://github.com/lhajoosten/lucjoosten.nl/actions/runs/43711835753) completed successfully.
 
-Verified public HTTPS responses: homepage, JavaScript and CSS return 200; an unknown URL returns the custom page with HTTP 404. Live Chromium smoke tests passed at 1440px and 390px, covering hydration, theme persistence, project dialogs, responsive width, mobile navigation and no page errors. The recent 15-minute Vercel error/fatal runtime-log query returned no entries. No external log drains are configured; these checks are a point-in-time verification rather than continuous monitoring. GitHub's Quality workflow also passed for the approved commit.
+Earlier live checks on the initially approved commit `6e14b18e24a13fd67646bd101992f59d48541240` verified public HTTPS responses: homepage, JavaScript and CSS returned 200; `www` redirected to the canonical domain with HTTP 308; an unknown URL returned the custom page with HTTP 404. Live Chromium smoke tests passed at 1440px and 390px, covering hydration, theme persistence, project dialogs, responsive width, mobile navigation and no page errors. The post-launch 15-minute Vercel error/fatal runtime-log query returned no entries. No external log drains were configured. These are historical, point-in-time results; the browser, HTTP and runtime-log checks were not rerun for this documentation update.
 
-Both domains report valid DNS configuration in Vercel. Preserve unrelated GoDaddy DNS records, especially email records. Any later production deployment still requires explicit owner approval.
+Both domains reported valid DNS configuration in Vercel during initial publication. Preserve unrelated GoDaddy DNS records, especially email records. Any later production deployment still requires explicit owner approval.
