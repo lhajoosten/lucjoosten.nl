@@ -1,3 +1,4 @@
+import { Link } from 'react-router';
 import { focusAreas, profiles } from '../content/home';
 import { Projects } from '../components/Projects';
 
@@ -72,6 +73,9 @@ export function HomePage() {
           </p>
         </div>
         <Projects />
+        <Link className="small-link projects-index-link" to="/projects">
+          View all projects <span aria-hidden="true">→</span>
+        </Link>
       </section>
       <section
         id="experience"

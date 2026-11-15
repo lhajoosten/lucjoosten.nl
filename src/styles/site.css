@@ -546,6 +546,111 @@
   .project-dialog .btn {
     margin-top: 24px;
   }
+  .projects-index-link {
+    margin-top: var(--space-8);
+  }
+  .page-intro {
+    margin-block: var(--space-12);
+    max-width: 800px;
+  }
+  .page-intro h1 {
+    font-size: clamp(52px, 7vw, 104px);
+    line-height: 1.02;
+    letter-spacing: -0.07em;
+    font-weight: 700;
+    margin-block: var(--space-6);
+  }
+  .page-intro > p:not(.mono) {
+    color: var(--muted);
+    line-height: 1.8;
+    max-width: 620px;
+  }
+  .projects-page .project {
+    min-width: 0;
+  }
+  .projects-page .project > .small-link {
+    align-self: start;
+    margin-top: auto;
+    flex-wrap: wrap;
+  }
+  .projects-page .project-status {
+    margin-bottom: var(--space-4);
+  }
+  .case-intro {
+    display: grid;
+    grid-template-columns: minmax(0, 2fr) minmax(0, 1fr);
+    gap: var(--space-12);
+    align-items: center;
+    border-bottom: 1px solid var(--line);
+  }
+  .case-visual {
+    background: var(--blue-soft);
+    padding: var(--space-8);
+    border: 1px solid var(--line);
+  }
+  .case-visual svg {
+    width: 100%;
+    height: auto;
+  }
+  .page-intro > p.case-subtitle {
+    font-size: clamp(22px, 2.5vw, 32px);
+    line-height: 1.3;
+    letter-spacing: -0.03em;
+    color: var(--ink);
+    margin-bottom: var(--space-6);
+  }
+  .case-intro .tags {
+    margin-top: var(--space-4);
+  }
+  .case-body {
+    display: grid;
+    grid-template-columns: minmax(180px, 1fr) minmax(0, 3fr);
+    gap: var(--space-12);
+    padding-top: var(--space-12);
+  }
+  .case-body nav {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+  }
+  .case-body nav a {
+    display: flex;
+    align-items: center;
+    min-height: 44px;
+    font-size: 14px;
+    color: var(--muted);
+    text-decoration: underline;
+    text-underline-offset: 4px;
+  }
+  .case-body nav a:hover {
+    color: var(--blue);
+  }
+  .case-prose {
+    max-width: 720px;
+  }
+  .case-prose section {
+    margin-bottom: var(--space-12);
+  }
+  .case-prose h2 {
+    font-size: clamp(28px, 3vw, 40px);
+    letter-spacing: -0.045em;
+    line-height: 1.15;
+    font-weight: 700;
+    margin-bottom: var(--space-6);
+  }
+  .case-prose p {
+    line-height: 1.85;
+    color: var(--muted);
+    margin-bottom: var(--space-6);
+  }
+  .case-source {
+    border-top: 1px solid var(--line);
+    padding-top: var(--space-8);
+  }
+  .case-prose .source-revision {
+    margin-top: var(--space-4);
+    overflow-wrap: anywhere;
+  }
   .not-found {
     padding-block: var(--space-27);
     min-height: 65vh;
@@ -603,6 +708,18 @@
   }
 }
 @media (max-width: 650px) {
+  .case-intro,
+  .case-body {
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--space-8);
+  }
+  .case-visual {
+    margin-bottom: var(--space-8);
+  }
+  .case-visual svg {
+    max-height: 160px;
+  }
+
   .topbar {
     height: 70px;
   }

@@ -1,4 +1,4 @@
-import type { HomepageProject } from '../content/home';
+import type { HomepageProject } from '../content/projects';
 
 export function ProjectDiagram({ type }: { type: HomepageProject['diagram'] }) {
   return (

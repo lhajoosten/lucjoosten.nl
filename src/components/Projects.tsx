@@ -1,6 +1,7 @@
+import { Link } from 'react-router';
 import { useRef, useState } from 'react';
-import { projects } from '../content/home';
-import type { HomepageProject } from '../content/home';
+import { projects } from '../content/projects';
+import type { HomepageProject } from '../content/projects';
 import { ProjectDiagram } from './ProjectDiagram';
 
 export function Projects() {
@@ -87,6 +88,11 @@ export function Projects() {
               : 'Private · source unavailable'}
           </dd>
         </dl>
+        {selected.slug === 'release-log' && (
+          <Link className="btn secondary" to="/projects/release-log">
+            Read the case study <span aria-hidden="true">→</span>
+          </Link>
+        )}
         {selected.repository.visibility === 'public' && (
           <a className="btn blue" href={selected.repository.url} target="_blank" rel="noreferrer">
             Read the project README <span aria-hidden="true">↗</span>

@@ -25,3 +25,9 @@ The original writing parser defaults missing publication status to published; do
 ## Initial homepage evidence
 
 Reviewed on 2026-11-15: the public [Release Log README](https://github.com/lhajoosten/release-log/blob/main/README.md) describes implemented core CLI components and explicit rollout limitations; the public [Azure AI Workbench README](https://github.com/lhajoosten/azure-ai-workbench/blob/main/README.md) explicitly states documentation-only status. Homepage summaries retain these distinctions. No source-project tests were run and no production outcomes are claimed. ReviewBot's private repository metadata was checked only for visibility; its source was not collected. Talven is deferred to later curation.
+
+## Phase 2 extension — 2026-11-15
+
+The owner approved [the first projects slice](../spec/phase-2-projects.md). Keep the static foundation: extend prerendering with a small explicit page/metadata list shared with client navigation and Vite preview. Emit project routes as directory index documents, with explicit hosting mappings and the existing HTTP 404 fallback. This revisits the two-route script without introducing a content engine or server runtime. Phase 1 production approval remains historical; this extension does not authorize deployment.
+
+The Release Log case study uses only the README at commit `53eaaf949d242b848108fed106a6809cadf74416`, reviewed 2026-11-15. No linked source files or source-project tests were collected or executed. Its documented implementation and rollout limitations remain distinct from proposed AI behavior and unverified production outcomes.

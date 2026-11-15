@@ -1,3 +1,4 @@
+import { Link } from 'react-router';
 import { useEffect, useRef, useState } from 'react';
 import { navigation } from '../content/home';
 import { ThemeToggle } from './ThemeToggle';
@@ -30,11 +31,17 @@ export function Header() {
           luc<span>.</span>joosten
         </a>
         <nav className="nav" aria-label="Main navigation">
-          {navigation.map((item) => (
-            <a key={item.label} href={item.href}>
-              {item.label}
-            </a>
-          ))}
+          {navigation.map((item) =>
+            item.href === '/projects' ? (
+              <Link key={item.label} to={item.href}>
+                {item.label}
+              </Link>
+            ) : (
+              <a key={item.label} href={item.href}>
+                {item.label}
+              </a>
+            ),
+          )}
         </nav>
         <div className="nav-tools">
           <span className="mono muted region">NL / EU</span>
@@ -58,11 +65,17 @@ export function Header() {
         aria-label="Mobile navigation"
         hidden={!open}
       >
-        {navigation.map((item) => (
-          <a key={item.label} href={item.href} onClick={() => setOpen(false)}>
-            {item.label}
-          </a>
-        ))}
+        {navigation.map((item) =>
+          item.href === '/projects' ? (
+            <Link key={item.label} to={item.href} onClick={() => setOpen(false)}>
+              {item.label}
+            </Link>
+          ) : (
+            <a key={item.label} href={item.href} onClick={() => setOpen(false)}>
+              {item.label}
+            </a>
+          ),
+        )}
       </nav>
     </header>
   );

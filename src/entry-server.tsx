@@ -1,6 +1,7 @@
 import { renderToString } from 'react-dom/server';
 import { StaticRouter } from 'react-router';
 import { App } from './app/App';
+export { pages, renderMetadata } from './app/metadata';
 
 export function render(url: string) {
   return renderToString(

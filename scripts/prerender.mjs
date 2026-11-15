@@ -1,14 +1,20 @@
-import { readFile, writeFile, rm } from 'node:fs/promises';
-import { render } from '../.prerender/entry-server.js';
+import { mkdir, readFile, writeFile, rm } from 'node:fs/promises';
+import { dirname } from 'node:path';
+import { pages, render, renderMetadata } from '../.prerender/entry-server.js';
 
 const template = await readFile('dist/index.html', 'utf8');
 if (!template.includes('<!--app-html-->')) throw new Error('Missing prerender placeholder');
-await writeFile('dist/index.html', template.replace('<!--app-html-->', render('/')));
-const notFound = template
-  .replace('<!--app-html-->', render('/not-found'))
-  .replace(/<title>.*?<\/title>/, '<title>Page not found — Luc Joosten</title>')
-  .replace(/<link rel="canonical"[^>]*>/, '<meta name="robots" content="noindex" />')
-  .replace(/<meta property="og:[^>]*>/g, '');
-await writeFile('dist/404.html', notFound);
+if (!template.includes('<!--page-metadata-->')) throw new Error('Missing metadata placeholder');
+for (const page of [...pages, { path: '/404.html' }]) {
+  const output =
+    page.path === '/404.html'
+      ? 'dist/404.html'
+      : `dist${page.path === '/' ? '' : page.path}/index.html`;
+  await mkdir(dirname(output), { recursive: true });
+  const document = template
+    .replace('<!--app-html-->', () => render(page.path))
+    .replace('<!--page-metadata-->', () => renderMetadata(page.path));
+  await writeFile(output, document);
+}
 await rm('.prerender', { recursive: true });
-console.log('Prerendered homepage and 404 document.');
+console.log(`Prerendered ${pages.length} pages and the 404 document.`);
