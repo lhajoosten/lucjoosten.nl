@@ -1,5 +1,7 @@
 # lucjoosten.nl
 
+[![Production](https://github.com/lhajoosten/lucjoosten.nl/actions/workflows/production.yml/badge.svg)](https://github.com/lhajoosten/lucjoosten.nl/actions/workflows/production.yml)
+
 Luc Joosten’s engineering portfolio. The foundation implements the approved Portfolio V2 homepage with React 19, TypeScript, Vite, Tailwind v4 and React Router. Phase 2 adds a projects index, a Release Log case study and an About page. No backend is required. Production runs on Vercel at [lucjoosten.nl](https://lucjoosten.nl).
 
 ## Local development
@@ -43,6 +45,8 @@ pnpm preview
 Projects navigation opens `/projects`; Release Log has a case study at `/projects/release-log`. Homepage cards retain their overview dialogs. About navigation opens `/about`; Experience, Expertise, Writing and Contact retain homepage anchors. Other case studies and full experience, writing and contact routes remain later milestones. Unknown routes, including unknown project slugs, show a not-found view. No articles are published yet. Release Log and Azure AI Workbench summaries reflect their public READMEs; those repositories’ tests were not executed here. ReviewBot has no source link or implementation claims because it is private.
 
 ## Build and hosting
+
+The proposed [production workflow](docs/operations/production-deployment.md) keeps PR previews and replaces automatic main releases with `Quality → production approval → staged smoke checks → promotion`. **Complete protected-environment and credential setup before merging that cutover.** The workflow refuses missing review/branch protections. GitHub shows the production environment URL, job summary and status badge. No live production workflow has been exercised yet.
 
 `pnpm build` generates static HTML for `/`, `/about`, `/projects`, `/projects/release-log` and `/404.html` with React’s server renderer, then hydrates in the browser. The project pages are emitted as directory index documents. Every valid page has a title, description, canonical URL and Open Graph metadata in its initial HTML and after client navigation. Unknown client routes clear valid-page metadata and set noindex. Fonts are self-hosted. Theme preference initializes before paint, persists when storage is available, and otherwise follows the OS until explicitly changed. No analytics, tracking, external font service or secret configuration is required.
 

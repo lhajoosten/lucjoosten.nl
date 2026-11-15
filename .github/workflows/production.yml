@@ -1,0 +1,135 @@
+name: Production
+on:
+  workflow_run:
+    workflows: [Quality]
+    branches: [main]
+    types: [completed]
+
+permissions:
+  contents: read
+  actions: read
+
+# Never cancel a deployment midway through a production change. Recheck main
+# after approval and immediately before promotion to reject superseded runs.
+concurrency:
+  group: production
+  cancel-in-progress: false
+
+jobs:
+  preflight:
+    if: >-
+      github.event.workflow_run.conclusion == 'success' &&
+      github.event.workflow_run.event == 'push' &&
+      github.event.workflow_run.head_branch == 'main' &&
+      github.event.workflow_run.head_repository.full_name == github.repository
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    outputs:
+      sha: ${{ steps.guard.outputs.sha }}
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        with:
+          node-version-file: .node-version
+      - name: Verify tested SHA and enforced environment protections
+        id: guard
+        run: node scripts/deployment/guard.mjs
+        env:
+          GH_TOKEN: ${{ github.token }}
+          WORKFLOW_SHA: ${{ github.sha }}
+
+  deploy:
+    needs: preflight
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    permissions:
+      contents: read
+      actions: read
+      deployments: write
+    environment:
+      name: production
+      url: https://lucjoosten.nl
+    env:
+      VERCEL_ORG_ID: team_mQHxrpQGEAZ8kWVh2ODSvlRj
+      VERCEL_PROJECT_ID: prj_Tff8LgZapzB7rkNldqAONWB8aQVp
+      VERCEL_CLI_VERSION: 65.16.0
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          ref: ${{ needs.preflight.outputs.sha }}
+          persist-credentials: false
+      - uses: pnpm/action-setup@f40ffcd9367d9f12939873eb1018b921a783ffaa # v4
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        with:
+          node-version-file: .node-version
+          cache: pnpm
+      - name: Recheck main and protections after approval
+        run: node scripts/deployment/guard.mjs
+        env:
+          GH_TOKEN: ${{ github.token }}
+          WORKFLOW_SHA: ${{ github.sha }}
+      - name: Require configured Vercel credentials
+        run: |
+          test -n "$VERCEL_TOKEN" || { echo 'Configure production environment secret VERCEL_TOKEN.'; exit 1; }
+          test -n "$VERCEL_AUTOMATION_BYPASS_SECRET" || { echo 'Configure production environment secret VERCEL_AUTOMATION_BYPASS_SECRET for staged smoke checks.'; exit 1; }
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+          VERCEL_AUTOMATION_BYPASS_SECRET: ${{ secrets.VERCEL_AUTOMATION_BYPASS_SECRET }}
+      - name: Install pinned Vercel CLI
+        run: npm install --global "vercel@$VERCEL_CLI_VERSION"
+      - run: pnpm install --frozen-lockfile
+      - name: Pull production build configuration
+        run: vercel pull --yes --environment=production
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+      - name: Build exact tested commit for production
+        run: vercel build --prod
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+      - name: Stage production build without assigning domains
+        id: stage
+        run: |
+          vercel deploy --prebuilt --prod --skip-domain --yes > "$RUNNER_TEMP/production-url.txt"
+          node --input-type=module <<'JS'
+          import { readFileSync, appendFileSync } from 'node:fs';
+          const value = readFileSync(`${process.env.RUNNER_TEMP}/production-url.txt`, 'utf8').trim();
+          const url = new URL(value);
+          if (url.protocol !== 'https:' || url.origin !== value || !url.hostname.endsWith('.vercel.app')) throw new Error('Unexpected deployment URL.');
+          appendFileSync(process.env.GITHUB_OUTPUT, `url=${value}\n`);
+          JS
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+      - name: Verify staged pages and real HTTP 404
+        run: node scripts/deployment/smoke.mjs "$DEPLOYMENT_URL"
+        env:
+          DEPLOYMENT_URL: ${{ steps.stage.outputs.url }}
+          VERCEL_AUTOMATION_BYPASS_SECRET: ${{ secrets.VERCEL_AUTOMATION_BYPASS_SECRET }}
+      - name: Recheck main immediately before promotion
+        run: node scripts/deployment/guard.mjs
+        env:
+          GH_TOKEN: ${{ github.token }}
+          WORKFLOW_SHA: ${{ github.sha }}
+      - name: Promote verified production build
+        run: vercel promote "$DEPLOYMENT_URL" --yes
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+          DEPLOYMENT_URL: ${{ steps.stage.outputs.url }}
+      - name: Verify public production routes
+        run: node scripts/deployment/smoke.mjs https://lucjoosten.nl
+      - name: Report production result
+        if: always()
+        run: |
+          {
+            echo '### Production deployment'
+            echo "Commit: $DEPLOY_SHA"
+            echo "Job status: $DEPLOY_STATUS"
+            echo "Staged deployment: $DEPLOYMENT_URL"
+            echo 'Production: https://lucjoosten.nl'
+          } >> "$GITHUB_STEP_SUMMARY"
+        env:
+          DEPLOY_SHA: ${{ needs.preflight.outputs.sha }}
+          DEPLOY_STATUS: ${{ job.status }}
+          DEPLOYMENT_URL: ${{ steps.stage.outputs.url }}
