@@ -40,7 +40,7 @@ Homepage links use anchors intentionally. Full project, experience, about, writi
 
 `pnpm build` generates static HTML for `/` and `/404.html` with React’s server renderer, then hydrates in the browser. Fonts are self-hosted. Theme preference initializes before paint, persists when storage is available, and otherwise follows the OS until explicitly changed. No analytics, tracking, external font service or secret configuration is required.
 
-Vercel configuration is prepared for a future approved deployment: install `pnpm install --frozen-lockfile`, build `pnpm build`, output `dist`. It serves existing static files and a real HTTP 404 for unknown paths. Local Vite preview uses SPA fallback; tests verify its rendered not-found UI, not Vercel routing. The private repository is `lhajoosten/lucjoosten.nl`. No deployment or DNS change has occurred.
+Vercel configuration is prepared for a future approved deployment: install `pnpm install --frozen-lockfile`, build `pnpm build`, output `dist`. It serves existing static files and a real HTTP 404 for unknown paths. Local Vite preview uses SPA fallback; tests verify its rendered not-found UI, not Vercel routing. The public repository is `lhajoosten/lucjoosten.nl`. No deployment or DNS change has occurred.
 
 The provided Git directory is read-only and resolves to a parent workspace repository. An isolated writable checkout is used to push this implementation to the new repository; a normal clone of that repository has standard Git behavior.
 

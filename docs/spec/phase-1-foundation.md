@@ -24,7 +24,7 @@ Full project case studies, secondary profile pages, Markdown/MDX, Zod schemas, f
 
 ## Workspace limitation
 
-The provided `.git` directory is read-only and Git resolves to the parent workspace repository. Build an independently installable project here; leave parent Git state and sibling projects untouched. The owner subsequently authorized pushing the implementation. A new private `lhajoosten/lucjoosten.nl` repository and an isolated writable checkout are used for the initial review branch. The provided `.git` mount remains unchanged.
+The provided `.git` directory is read-only and Git resolves to the parent workspace repository. Build an independently installable project here; leave parent Git state and sibling projects untouched. The owner subsequently authorized pushing the implementation. A new public `lhajoosten/lucjoosten.nl` repository and an isolated writable checkout are used for the initial review branch. The provided `.git` mount remains unchanged.
 
 ## Verified implementation — 2026-11-15
 
