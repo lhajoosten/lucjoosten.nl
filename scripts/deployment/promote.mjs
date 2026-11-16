@@ -23,7 +23,7 @@ export async function promote({
   )
     throw new Error('Valid staged URL, tested SHA, team, project and token are required.');
 
-  const api = async (path, method = 'GET') => {
+  const api = async (path, method = 'GET', allowMissing = false) => {
     const response = await request(`https://api.vercel.com${path}?teamId=${teamId}`, {
       method,
       headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
@@ -32,6 +32,7 @@ export async function promote({
       signal: AbortSignal.timeout(30_000),
     });
     // Never echo API response bodies, credentials or retry an uncertain POST.
+    if (allowMissing && response.status === 404) return null;
     if (!response.ok) throw new Error(`Vercel ${method} ${path} failed (${response.status}).`);
     return method === 'POST' ? null : response.json();
   };
@@ -56,12 +57,18 @@ export async function promote({
     if (current.id !== projectId || current.accountId !== teamId)
       throw new Error('Vercel project/team changed while waiting for promotion.');
     const status = current.lastAliasRequest;
-    if (status?.toDeploymentId === deployment.id) {
-      if (status.jobStatus === 'failed') throw new Error('Production alias promotion failed.');
-      if (status.jobStatus === 'succeeded') {
-        console.log(`Promoted verified deployment ${deployment.id} at ${sha}.`);
-        return;
-      }
+    if (status?.toDeploymentId === deployment.id && status.jobStatus === 'failed')
+      throw new Error('Production alias promotion failed.');
+    // Confirm serving state directly; project job-status fields are not always exposed.
+    const alias = await api('/v4/aliases/lucjoosten.nl', 'GET', true);
+    if (
+      alias &&
+      (alias.alias !== 'lucjoosten.nl' || alias.projectId !== projectId || alias.redirect)
+    )
+      throw new Error('Production domain/project mismatch or unexpected redirect.');
+    if (alias?.deploymentId === deployment.id) {
+      console.log(`Confirmed lucjoosten.nl serves verified deployment ${deployment.id} at ${sha}.`);
+      return;
     }
     if (attempt + 1 < attempts) await sleep(5000);
   }
