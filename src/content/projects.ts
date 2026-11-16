@@ -26,6 +26,18 @@ export const projects = [
     repository: { visibility: 'public', url: 'https://github.com/lhajoosten/release-log' },
   },
   {
+    slug: 'upkeep',
+    title: 'Upkeep',
+    category: 'Developer tooling',
+    summary: 'A Rust dependency management bot with local, read-only Python dependency discovery.',
+    detail:
+      'Upkeep is being built for Azure DevOps repositories and pipelines. Its aim is secure, configurable dependency updates with explicit policies and predictable execution. The current release provides local, read-only Python dependency discovery. Azure DevOps integration is planned.',
+    status: 'Private · local discovery available',
+    tags: ['Rust', 'Python dependencies', 'Azure DevOps planned'],
+    diagram: 'review',
+    repository: { visibility: 'private' },
+  },
+  {
     slug: 'azure-ai-workbench',
     title: 'Azure AI Workbench',
     category: 'Cloud & AI',

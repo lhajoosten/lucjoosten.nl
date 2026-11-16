@@ -40,9 +40,15 @@ test('projects retain reviewed status and expose only the available case study',
       <App />
     </MemoryRouter>,
   );
-  expect(screen.getAllByRole('article')).toHaveLength(3);
+  expect(screen.getAllByRole('article')).toHaveLength(4);
+  expect(screen.getByRole('heading', { name: 'Upkeep' })).toBeInTheDocument();
+  expect(screen.getByText('Private · local discovery available')).toBeInTheDocument();
+  expect(
+    screen.getByText(/The current release provides local, read-only Python/),
+  ).toBeInTheDocument();
+  expect(screen.queryByRole('link', { name: /Upkeep/ })).not.toBeInTheDocument();
   expect(screen.getByText('Planning · documentation only')).toBeInTheDocument();
-  expect(screen.getByText('Private · source unavailable')).toBeInTheDocument();
+  expect(screen.getAllByText('Private · source unavailable')).toHaveLength(2);
   expect(screen.getByRole('link', { name: 'Read the Release Log case study' })).toHaveAttribute(
     'href',
     '/projects/release-log',
