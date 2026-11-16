@@ -1,8 +1,12 @@
 import { render, screen } from '@testing-library/react';
 import { Link, MemoryRouter } from 'react-router';
-import { expect, test, vi } from 'vitest';
+import { beforeEach, expect, test, vi } from 'vitest';
 import userEvent from '@testing-library/user-event';
 import { App } from './App';
+
+beforeEach(() => {
+  vi.stubGlobal('fetch', vi.fn().mockResolvedValue(new Response('[]')));
+});
 
 test('renders the supplied professional positioning and real homepage destinations', () => {
   render(

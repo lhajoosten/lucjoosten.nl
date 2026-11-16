@@ -33,6 +33,7 @@ pnpm preview
 - `src/content/profile.ts`: approved positioning, current role, technical focus and profile links shared by home/About.
 - `src/content/projects.ts`: shared reviewed project summaries and visibility.
 - `src/content/release-log.ts`: curated case-study copy and pinned README provenance.
+- `src/content/release-log-version.ts`: optional public GitHub stable-tag resolution for the Release Log case study.
 - `src/app/metadata.ts`: explicit page list and metadata for prerendering and client navigation.
 - `src/styles`: light/dark design tokens and responsive layouts.
 - `docs/engineering/lucjoosten-portfolio-v2.html`: unchanged approved prototype, kept local and untracked.
@@ -43,6 +44,8 @@ pnpm preview
 - `docs/adr/0001-static-react-foundation.md`: architecture and archived-repository inspection.
 
 Projects navigation opens `/projects`; Release Log has a case study at `/projects/release-log`. Homepage cards retain their overview dialogs. About navigation opens `/about`; Experience, Expertise, Writing and Contact retain homepage anchors. Other case studies and full experience, writing and contact routes remain later milestones. Unknown routes, including unknown project slugs, show a not-found view. No articles are published yet. Release Log and Azure AI Workbench summaries reflect their public READMEs; those repositories’ tests were not executed here. ReviewBot has no source link or implementation claims because it is private.
+
+Release Log’s expanded case study covers its packaged CLI, human-reviewed release cycle, self-use, AI boundaries and remaining validation. The narrative is reviewed against a pinned README; it does not update automatically. On each case-study mount, an optional browser request to GitHub’s public matching-refs API selects the highest stable `vMAJOR.MINOR.PATCH` tag numerically. Prereleases and malformed tags are excluded. New tags appear on a later visit without a website commit or deployment. No credentials, referrer, persistent cache, scheduled job or build-time network access is used. GitHub still receives the visitor’s ordinary network request. Failure, rate limiting, a five-second timeout or disabled JavaScript leaves ordinary usage/tag links available. Tags identify source versions, not successful container publication; the usage link always points to the current upstream README for verified image/digest instructions. See [ADR 0003](docs/adr/0003-release-log-version-resolution.md).
 
 ## Build and hosting
 

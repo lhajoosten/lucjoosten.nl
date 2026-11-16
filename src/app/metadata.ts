@@ -29,7 +29,7 @@ export const pages: readonly PageMetadata[] = [
     path: '/projects/release-log',
     title: 'Release Log — Luc Joosten',
     description:
-      'A source-backed look at Release Log: deterministic changelogs, captured release data, AI boundaries and documented rollout limitations.',
+      'Release Log: a packaged TypeScript CLI for deterministic changelogs, reviewed release PRs and exact version tagging, with clear AI boundaries.',
   },
 ];
 

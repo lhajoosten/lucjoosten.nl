@@ -1,5 +1,19 @@
 import { expect, test } from '@playwright/test';
 import AxeBuilder from '@axe-core/playwright';
+import { releaseLog } from '../../src/content/release-log';
+import { releaseLogRefsUrl } from '../../src/content/release-log-version';
+
+test.beforeEach(async ({ page }) => {
+  await page.route(releaseLogRefsUrl, (route) =>
+    route.fulfill({
+      json: [
+        { ref: 'refs/tags/v0.2.1' },
+        { ref: 'refs/tags/v0.3.0' },
+        { ref: 'refs/tags/v0.4.0-rc.1' },
+      ],
+    }),
+  );
+});
 
 const routes = [
   { path: '/projects', title: 'Projects — Luc Joosten', heading: 'Engineering in practice.' },
@@ -77,8 +91,10 @@ for (const route of routes) {
     } else {
       await expect(page.getByRole('link', { name: 'Read the reviewed README' })).toHaveAttribute(
         'href',
-        /53eaaf949d242b848108fed106a6809cadf74416\/README.md$/,
+        releaseLog.source.url,
       );
+      await expect(page.getByRole('link', { name: 'Run the published CLI' })).toBeVisible();
+      await expect(page.getByRole('link', { name: 'Browse version tags on GitHub' })).toBeVisible();
       await expect(page.getByText(/Source-project tests were not executed/)).toBeVisible();
       await page.getByRole('link', { name: 'Back to projects' }).first().click();
       await expect(page.getByRole('heading', { level: 1 })).toHaveText('Engineering in practice.');
@@ -135,6 +151,28 @@ test('project navigation supports keyboard focus, history, metadata and homepage
     'href',
     'https://lucjoosten.nl/',
   );
+});
+
+test('resolves the latest stable tag without changing the reviewed narrative', async ({ page }) => {
+  await page.goto('/projects/release-log');
+  await expect(page.getByRole('link', { name: 'v0.3.0', exact: true })).toHaveAttribute(
+    'href',
+    'https://github.com/lhajoosten/release-log/tree/v0.3.0',
+  );
+  await expect(page.getByText('Latest stable tag:', { exact: false })).toBeVisible();
+  await expect(page.getByRole('link', { name: 'Read the reviewed README' })).toHaveAttribute(
+    'href',
+    releaseLog.source.url,
+  );
+  await expect(page.getByRole('link', { name: 'Run the published CLI' })).toBeVisible();
+});
+
+test('keeps usage links working when GitHub is rate limited', async ({ page }) => {
+  await page.route(releaseLogRefsUrl, (route) => route.fulfill({ status: 403, json: {} }));
+  await page.goto('/projects/release-log');
+  await expect(page.getByRole('link', { name: 'Browse version tags on GitHub' })).toBeVisible();
+  await expect(page.getByRole('link', { name: 'Run the published CLI' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Packaged for use' })).toBeVisible();
 });
 
 test('homepage dialog and index links reach the new routes', async ({ page }) => {

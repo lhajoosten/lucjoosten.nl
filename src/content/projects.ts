@@ -16,10 +16,11 @@ export const projects = [
     slug: 'release-log',
     title: 'Release Log',
     category: 'Developer tooling',
-    summary: 'A TypeScript CLI for deterministic changelogs and structured release context.',
+    summary:
+      'A packaged TypeScript CLI for deterministic changelogs and reviewed release automation.',
     detail:
-      'Release Log separates reproducible changelog generation from optional AI-assisted release notes. Git/PR collection, snapshots, version planning and rendering are implemented. Release automation has documented rollout limits; the reusable workflow is not yet deployed.',
-    status: 'In development',
+      'Release Log captures Git/PR context, prepares a release PR and tags its reviewed merge. The project uses its own workflow and distributes a Linux/amd64 container. Deterministic changelogs work without AI; AI-written release notes remain planned.',
+    status: 'Available · actively developed',
     tags: ['TypeScript', 'GitHub', 'Developer tooling'],
     diagram: 'release',
     repository: { visibility: 'public', url: 'https://github.com/lhajoosten/release-log' },
