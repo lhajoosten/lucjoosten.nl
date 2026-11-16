@@ -21,7 +21,7 @@ The workflow rechecks Quality, main and environment protection, installs pinned 
 
 Smoke checks discover every generated directory index in `dist`, so future pages such as About are covered without duplicating a route list. They require each page's initial title, canonical and heading, plus the custom noindex HTTP 404 for an unknown path. Staging requests use a protection-bypass header only on same-origin HTTPS requests; cross-origin redirects fail without forwarding it. Public production checks use no bypass.
 
-Immediately before promotion, the workflow rechecks current main and environment rules. Only the already staged production build is promoted. It then verifies `https://lucjoosten.nl`. If public verification fails, the job/deployment is marked failed and the result summary identifies the SHA and staged URL. There is no automatic rollback.
+Immediately before promotion, the workflow rechecks current main and environment rules. Only the already staged production build is promoted. The Node promotion helper uses Vercel’s team-scoped REST API, verifies project ownership and the READY production deployment’s exact URL/project/tested commit, requests promotion once and waits up to about three minutes for that deployment’s alias request to succeed. It never rebuilds a preview or retries an uncertain promotion request. It then verifies `https://lucjoosten.nl`. If public verification fails, the job/deployment is marked failed and the result summary identifies the SHA and staged URL. There is no automatic rollback.
 
 ## Repository visibility
 
@@ -32,9 +32,18 @@ Use the README's **Production** workflow badge, the Actions tab, job summaries a
 - A missing environment, reviewer, branch rule or credential fails before deployment. Complete setup, then re-run the successful current-main Quality workflow to produce a fresh eligible completion event. Production workflows are intentionally not manually dispatchable on arbitrary refs.
 - If main advances while an older run waits for approval, reject/cancel that waiting run. A mistakenly approved older run fails its guard; the newer run can then proceed. Do not cancel during promotion; concurrency is configured to avoid doing so automatically.
 - If staging/build/smoke fails before promotion, the existing production deployment remains live. Fix through a new reviewed PR and deploy the new successful main SHA.
+- If promotion fails with `User not found. (404)` under CLI 65.16.0 after staging succeeds, the CLI’s personal-user lookup can fail despite valid team project access. Do not rotate working credentials merely on that evidence. The promotion helper calls the [production promotion API](https://vercel.com/docs/rest-api/projects/point-production-traffic-to-a-given-deployment) with the fixed team ID and avoids that lookup. Inspect the staged deployment and alias status before any retry after a network error or timeout; the server may already have accepted the request.
 - If public checks fail after promotion, inspect the exact deployment and make an explicit owner-approved rollback or fix-forward decision. Workflow reruns check current main again.
 - Re-enabling automatic Vercel main deployments is a separate reviewed cutover, alongside disabling the Production workflow, to prevent duplicate releases. Never change DNS as part of workflow recovery.
 
 Local guard/smoke tests and actionlint validate the code and workflow structure; they cannot prove GitHub approval or Vercel promotion end to end. The first live run needs separate explicit approval and must be recorded with its actual outcome.
+
+## Recovery evidence — 2026-11-16
+
+Production run `43961621433` initially failed preflight because the repository had no environments. At the owner’s recovery request, `production` was created with required owner review, administrative bypass disabled and one `main` branch policy. The actual guard passed against live GitHub state, and the rerun’s preflight succeeded. The owner subsequently configured both required Vercel secrets and approved deployment.
+
+After Upkeep PR #7 merged, run `43963778042` at commit `6085708a72a40f7f4b5902bde63fd264dce454e8` built and staged deployment `dpl_BpJABGQfVoBdrstikVEdk3zRNvFs`. Staged page/HTTP checks and the final GitHub guard passed. CLI promotion failed with `User not found. (404)`; public verification was skipped. Vercel reported the staged deployment READY, target production, with no aliases. No successful production promotion is claimed.
+
+Inspection of the published `@vercel/cli-support@65.16.0` package reproduced its context lookup failure with a synthetic personal-user 404, both with and without explicit team scope. The helper’s regression fixtures exercise team-only API access, exact deployment identity, single promotion submission, pending/success/failure alias states and uncertain-request handling. A successful live run of the changed helper remains to be established after PR review and deployment approval.
 
 References: [Vercel Git configuration](https://vercel.com/docs/project-configuration/git-configuration), [Vercel CLI deployment](https://vercel.com/docs/cli/deploy), [Vercel promotion](https://vercel.com/docs/cli/promote), [GitHub environment protection](https://docs.github.com/en/actions/reference/workflows-and-actions/deployments-and-environments).
