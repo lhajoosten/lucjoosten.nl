@@ -7,9 +7,10 @@ and [release policy](https://github.com/lhajoosten/release-log/blob/e3f2d3173704
 
 ## Current state and intended behavior
 
-The caller is staged for validation: `RELEASE_LOG_ENABLED` is unset and `write`
+The caller is staged for validation: `RELEASE_LOG_ENABLED` is `true` and `write`
 is `false`. The owner reports that the App is installed. The required repository
-Actions variables and secret were still absent on the latest setup check.
+Actions variable values and private-key secret name were verified as present;
+the key contents and installed permissions still require a live run to validate.
 No changelog has been generated and no live integration run has been verified.
 The owner approved including existing history on 2026-11-16. The fixed history
 boundaries are recorded in the caller's trusted configuration.
