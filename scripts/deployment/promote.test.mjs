@@ -15,6 +15,7 @@ function fixture({
   deployment = {},
   project = {},
   statuses = ['succeeded'],
+  aliasMappings = ['dpl_test'],
   postStatus = 201,
 } = {}) {
   const calls = [];
@@ -45,6 +46,13 @@ function fixture({
         meta: { githubCommitSha: settings.sha },
         ...deployment,
       });
+    if (url.pathname === '/v4/aliases/lucjoosten.nl')
+      return Response.json({
+        alias: 'lucjoosten.nl',
+        projectId: 'prj_test',
+        deploymentId: aliasMappings.shift() ?? 'dpl_other',
+        redirect: null,
+      });
     assert.equal(url.pathname, '/v10/projects/prj_test/promote/dpl_test');
     assert.equal(options.method, 'POST');
     return new Response('', { status: postStatus });
@@ -53,15 +61,25 @@ function fixture({
 }
 
 test('promotes with team-only API access, then waits for the exact deployment', async () => {
-  const { calls, request } = fixture({ statuses: ['pending', 'succeeded'] });
+  const { calls, request } = fixture({
+    statuses: ['pending', 'succeeded'],
+    aliasMappings: ['dpl_previous', 'dpl_test'],
+  });
   await promote({ ...settings, request });
-  assert.equal(calls.length, 5);
+  assert.equal(calls.length, 7);
   assert.equal(calls.filter(({ options }) => options.method === 'POST').length, 1);
   assert.ok(calls.every(({ url }) => url.pathname !== '/v2/user'));
   for (const { options } of calls) {
     assert.equal(options.headers.Authorization, `Bearer ${settings.token}`);
     assert.equal(options.redirect, 'error');
   }
+});
+
+test('recognizes a completed promotion without project job-status fields', async () => {
+  const { calls, request } = fixture({ project: { lastAliasRequest: undefined } });
+  await promote({ ...settings, request });
+  assert.equal(calls.filter(({ options }) => options.method === 'POST').length, 1);
+  assert.ok(calls.some(({ url }) => url.pathname === '/v4/aliases/lucjoosten.nl'));
 });
 
 for (const deployment of [
@@ -104,7 +122,7 @@ test('does not retry a rejected or uncertain promotion request', async () => {
   assert.equal(posts, 1);
 });
 
-test('rejects failed aliasing and does not mistake a different promotion for success', async () => {
+test('rejects failed aliasing and does not mistake a different domain mapping for success', async () => {
   await assert.rejects(
     promote({ ...settings, request: fixture({ statuses: ['failed'] }).request }),
     /alias promotion failed/,
@@ -113,11 +131,66 @@ test('rejects failed aliasing and does not mistake a different promotion for suc
     promote({
       ...settings,
       request: fixture({
-        project: {
-          lastAliasRequest: { toDeploymentId: 'dpl_other', jobStatus: 'succeeded' },
-        },
+        aliasMappings: ['dpl_other', 'dpl_other'],
       }).request,
     }),
     /not confirmed/,
   );
+});
+
+test('domain mapping confirms success even when the project reports an unrelated older job', async () => {
+  await promote({
+    ...settings,
+    request: fixture({
+      project: {
+        lastAliasRequest: { toDeploymentId: 'dpl_other', jobStatus: 'succeeded' },
+      },
+    }).request,
+  });
+});
+
+test('waits through a missing alias but does not swallow an authorization failure', async () => {
+  const { request } = fixture();
+  let aliasReads = 0;
+  await promote({
+    ...settings,
+    request: async (url, options) => {
+      if (new URL(url).pathname === '/v4/aliases/lucjoosten.nl' && aliasReads++ === 0)
+        return new Response('', { status: 404 });
+      return request(url, options);
+    },
+  });
+  await assert.rejects(
+    promote({
+      ...settings,
+      request: async (url, options) => {
+        if (new URL(url).pathname === '/v4/aliases/lucjoosten.nl')
+          return new Response('', { status: 403 });
+        return request(url, options);
+      },
+    }),
+    /failed \(403\)/,
+  );
+});
+
+test('rejects an alias from a different project or a redirected production domain', async () => {
+  for (const override of [{ projectId: 'prj_other' }, { redirect: 'other.example' }]) {
+    const { request } = fixture();
+    await assert.rejects(
+      promote({
+        ...settings,
+        request: async (url, options) => {
+          if (new URL(url).pathname === '/v4/aliases/lucjoosten.nl')
+            return Response.json({
+              alias: 'lucjoosten.nl',
+              projectId: 'prj_test',
+              deploymentId: 'dpl_test',
+              ...override,
+            });
+          return request(url, options);
+        },
+      }),
+      /domain\/project mismatch/,
+    );
+  }
 });
