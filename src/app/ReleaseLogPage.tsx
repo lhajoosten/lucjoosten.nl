@@ -2,6 +2,7 @@ import { Link } from 'react-router';
 import { releaseLog } from '../content/release-log';
 import { projects } from '../content/projects';
 import { ProjectDiagram } from '../components/ProjectDiagram';
+import { ReleaseLogAvailability } from '../components/ReleaseLogAvailability';
 
 export function ReleaseLogPage() {
   const project = projects[0];
@@ -36,6 +37,7 @@ export function ReleaseLogPage() {
         <aside>
           <nav aria-label="Case study sections">
             <p className="mono muted">In this case study</p>
+            <a href="#get-cli-heading">Get the CLI</a>
             {releaseLog.sections.map((section) => (
               <a key={section.id} href={`#${section.id}`}>
                 {section.title}
@@ -44,6 +46,7 @@ export function ReleaseLogPage() {
           </nav>
         </aside>
         <div className="case-prose">
+          <ReleaseLogAvailability />
           {releaseLog.sections.map((section) => (
             <section key={section.id} id={section.id} aria-labelledby={`${section.id}-heading`}>
               <h2 id={`${section.id}-heading`}>{section.title}</h2>
@@ -56,8 +59,9 @@ export function ReleaseLogPage() {
             <h2 id="source-heading">Source & review</h2>
             <p>
               This case study is based only on the public README, reviewed{' '}
-              <time dateTime={releaseLog.source.reviewed}>15 November 2026</time>. It describes the
-              project at that revision.
+              <time dateTime={releaseLog.source.reviewed}>16 November 2026</time>. It describes the
+              project at that revision. The latest stable tag above is resolved separately from
+              public GitHub tags when this page is opened.
             </p>
             <a className="small-link" href={releaseLog.source.url} target="_blank" rel="noreferrer">
               Read the reviewed README <span aria-hidden="true">↗</span>
