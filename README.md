@@ -51,7 +51,7 @@ Release Log’s expanded case study covers its packaged CLI, human-reviewed rele
 
 ## Build and hosting
 
-The [Release Log CI integration](docs/operations/release-log.md) is staged with a pinned reusable workflow and CLI, an enable switch and dry-run mode. App credentials and owner-approved history boundaries must be configured before validation; live proposal/tag writes require a separately reviewed activation. The PR template supplies structured changelog context.
+The [Release Log CI integration](docs/operations/release-log.md) is staged with a pinned reusable workflow and CLI, an enable switch and dry-run mode. Its approved configuration includes existing history after the initial commit, with legacy metadata handling through the fixed onboarding boundary. App credentials must be configured before validation; live proposal/tag writes require a separately reviewed activation. The PR template supplies structured changelog context.
 
 The proposed [production workflow](docs/operations/production-deployment.md) keeps PR previews and replaces automatic main releases with `Quality → production approval → staged smoke checks → promotion`. **Complete protected-environment and credential setup before merging that cutover.** The workflow refuses missing review/branch protections. GitHub shows the production environment URL, job summary and status badge. No live production workflow has been exercised yet.
 

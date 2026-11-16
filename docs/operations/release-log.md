@@ -8,9 +8,11 @@ and [release policy](https://github.com/lhajoosten/release-log/blob/e3f2d3173704
 ## Current state and intended behavior
 
 The caller is staged for validation: `RELEASE_LOG_ENABLED` is unset and `write`
-is `false`. No repository Actions variables or secrets were present when inspected.
+is `false`. The owner reports that the App is installed. The required repository
+Actions variables and secret were still absent on the latest setup check.
 No changelog has been generated and no live integration run has been verified.
-History boundaries require owner agreement before configuration.
+The owner approved including existing history on 2026-11-16. The fixed history
+boundaries are recorded in the caller's trusted configuration.
 
 After setup, an ordinary PR merge into `main` runs capture and deterministic
 changelog generation. With live writes separately enabled, the bot maintains one
@@ -29,51 +31,32 @@ confined to a release branch. Keep credentials out of this repository and logs.
 
 Configure these repository Actions settings:
 
-| Kind     | Name                        | Value                                                                        |
-| -------- | --------------------------- | ---------------------------------------------------------------------------- |
-| Variable | `RELEASE_APP_ID`            | The installed App's ID                                                       |
-| Variable | `RELEASE_BOT_USER_ID`       | The App bot account's numeric user ID, distinct from the App/installation ID |
-| Secret   | `RELEASE_APP_PRIVATE_KEY`   | The App's private key                                                        |
-| Variable | `RELEASE_LOG_CONFIGURATION` | Owner-reviewed JSON using the shape below                                    |
-| Variable | `RELEASE_LOG_ENABLED`       | `true`, after the other settings are ready                                   |
+| Kind     | Name                      | Value                                                                        |
+| -------- | ------------------------- | ---------------------------------------------------------------------------- |
+| Variable | `RELEASE_APP_ID`          | The installed App's ID                                                       |
+| Variable | `RELEASE_BOT_USER_ID`     | The App bot account's numeric user ID, distinct from the App/installation ID |
+| Secret   | `RELEASE_APP_PRIVATE_KEY` | The App's private key                                                        |
+| Variable | `RELEASE_LOG_ENABLED`     | `true`, after the other settings are ready                                   |
 
-Configuration is trusted Actions input, not a file loaded from a PR head.
-Restrict settings edits to maintainers. Changes alter captured identities and
-need review, just like caller-pin changes. The reusable workflow executes only
-pinned tool code; consumer history is read as data.
+Configuration is trusted input embedded in the reviewed
+[caller workflow](../../.github/workflows/release-log.yml), not a file loaded from
+a PR head or a mutable configuration variable. Changes alter captured identities
+and need PR review, just like caller-pin changes. The reusable workflow executes
+only pinned tool code; consumer history is read as data.
 
-Replace the boundary placeholders only after owner agreement. This is a setup
-example, not an executable configuration:
-
-```json
-{
-  "schemaVersion": 2,
-  "repository": "lhajoosten/lucjoosten.nl",
-  "repositoryId": 1458711968,
-  "releaseBranch": "main",
-  "releasePolicy": "release-policy-v1",
-  "contextPolicy": "required",
-  "changelog": { "verbosity": "concise", "format": "compact" },
-  "bootstrap": {
-    "baselineSha": "OWNER_APPROVED_EXCLUSIVE_BASELINE_SHA",
-    "onboardingSha": "OWNER_APPROVED_LEGACY_BOUNDARY_SHA"
-  }
-}
-```
-
-For including existing history, the initial commit
-`ed051000556633e810eaee8d9d403516c299b823` is a candidate exclusive baseline;
-its own changes are excluded. Main at setup inspection was
-`93cce7c4b3b8ca65e9102af6316860d23e3dcc8a`, a candidate fixed onboarding boundary.
-For starting history at current main, that commit can be both boundaries. These
-are proposals pending owner selection. Never invent a previous release tag or
+The approved exclusive baseline is the initial commit,
+`ed051000556633e810eaee8d9d403516c299b823`; its own changes are excluded, and all
+subsequent reachable history is included. The fixed onboarding boundary is
+`93cce7c4b3b8ca65e9102af6316860d23e3dcc8a`, main when the choice was proposed.
+History through that boundary receives legacy metadata handling with warnings;
+later changes require normal PR metadata. Never invent a previous release tag or
 move onboarding forward on later runs. Initial adoption proposes `0.1.0`; the
 existing package version is also `0.1.0`, but is not evidence of a tagged release.
 
 ## Validation and activation
 
-1. Review the pinned upstream workflow, tool and lockfile together, approve the
-   history boundaries, and configure the App settings above.
+1. Review the pinned upstream workflow, tool and lockfile together and configure
+   the App settings above. The history boundaries are already approved.
 2. Merge the reviewed integration PR, then inspect a merged-PR run with
    `write: false`. Closed but unmerged PRs are skipped. The reusable workflow
    supplies CLI diagnostics in run logs, not caller outputs or a downloadable
