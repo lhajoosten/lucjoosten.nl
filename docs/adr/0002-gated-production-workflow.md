@@ -21,3 +21,9 @@ Keeping automatic main deployment and merely observing its completion is simpler
 Protected environment and Vercel credentials must exist before merging the cutover. Pending approval keeps the existing production deployment live. Staged verification checks the production build that will be promoted, at the cost of CLI setup and a second build after Quality. Repeated SHA checks and serialisation reject known stale runs but are not atomic across both services. Failed post-promotion checks require a human recovery decision; rollback is not automatic.
 
 See the [spec](../spec/production-deployment.md) and [operations guide](../operations/production-deployment.md). The independent About PR has no dependency on this cutover.
+
+## Promotion recovery — 2026-11-16
+
+Keep the approved Quality, reviewer, staged-build and smoke-check sequence. Use a small Node helper for the promotion step only: call Vercel’s documented team-scoped promotion API and wait for the same deployment’s successful alias request. CLI 65.16.0 staged the production build successfully but failed promotion with a personal-user lookup error; its published context-resolution code reproduces that failure even with explicit team scope. Avoid broadening token access to a personal account to work around a team operation.
+
+Before mutation, validate the fixed project/team and staged URL, READY production target and tested Git commit. Submit promotion once; an uncertain response requires inspection before any retry. Credentials remain protected environment variables, API requests refuse redirects and public smoke checks still follow confirmed promotion. This changes no reviewer protections, deploy targets or release triggers. The recovery PR’s local fixtures do not establish live promotion success; review and a separately approved workflow run remain required.
