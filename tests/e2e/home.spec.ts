@@ -112,6 +112,24 @@ test('system theme works without a saved preference and reduced motion disables 
   ).toBe('0s');
 });
 
+test('Upkeep overview distinguishes current discovery from planned integration', async ({
+  page,
+}) => {
+  await page.goto('/');
+  const card = page.getByRole('button', { name: 'Read about Upkeep' });
+  await card.click();
+  const dialog = page.getByRole('dialog', { name: 'Upkeep' });
+  await expect(dialog).toBeVisible();
+  await expect(
+    dialog.getByText(/current release provides local, read-only Python dependency discovery/),
+  ).toBeVisible();
+  await expect(dialog.getByText(/Azure DevOps integration is planned/)).toBeVisible();
+  await expect(dialog.getByText('Private · source unavailable')).toBeVisible();
+  await expect(dialog.getByRole('link')).toHaveCount(0);
+  await page.keyboard.press('Escape');
+  await expect(card).toBeFocused();
+});
+
 test('prerendered content is available without JavaScript', async ({ browser }) => {
   const context = await browser.newContext({ javaScriptEnabled: false });
   const page = await context.newPage();

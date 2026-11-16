@@ -83,9 +83,15 @@ for (const route of routes) {
       `https://lucjoosten.nl${route.path}`,
     );
     if (route.path === '/projects') {
-      await expect(page.getByRole('article')).toHaveCount(3);
+      await expect(page.getByRole('article')).toHaveCount(4);
+      const upkeep = page.getByRole('article', { name: 'Upkeep' });
+      await expect(
+        upkeep.getByText(/local, read-only Python dependency discovery/).last(),
+      ).toBeVisible();
+      await expect(upkeep.getByText(/Azure DevOps integration is planned/)).toBeVisible();
+      await expect(upkeep.getByRole('link')).toHaveCount(0);
       await expect(page.getByText('Planning · documentation only')).toBeVisible();
-      await expect(page.getByText('Private · source unavailable')).toBeVisible();
+      await expect(page.getByText('Private · source unavailable')).toHaveCount(2);
       await page.getByRole('link', { name: 'Read the Release Log case study' }).click();
       await expect(page.getByRole('heading', { level: 1 })).toHaveText('Release Log.');
     } else {
