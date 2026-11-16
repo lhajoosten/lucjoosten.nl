@@ -1,0 +1,26 @@
+name: Release Log
+
+on:
+  pull_request_target:
+    types: [closed]
+    branches: [main]
+
+permissions:
+  contents: read
+  pull-requests: read
+
+jobs:
+  release:
+    # Enable after the App and owner-approved history configuration are set up.
+    if: github.event.pull_request.merged == true && vars.RELEASE_LOG_ENABLED == 'true'
+    uses: lhajoosten/release-log/.github/workflows/rolling-release.yml@e3f2d317370447f6608be17941ade53b099d8fd2
+    with:
+      tool-sha: e3f2d317370447f6608be17941ade53b099d8fd2
+      release-branch: main
+      app-id: ${{ vars.RELEASE_APP_ID }}
+      bot-user-id: ${{ vars.RELEASE_BOT_USER_ID }}
+      # Validate capture and generation before separately reviewing live writes.
+      write: false
+      configuration: ${{ vars.RELEASE_LOG_CONFIGURATION }}
+    secrets:
+      app-private-key: ${{ secrets.RELEASE_APP_PRIVATE_KEY }}
