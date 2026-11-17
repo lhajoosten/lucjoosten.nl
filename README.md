@@ -51,6 +51,8 @@ Release Log’s expanded case study covers its packaged CLI, human-reviewed rele
 
 ## Build and hosting
 
+The [Release Log CI integration](docs/operations/release-log.md) pulls the CLI container's owner-selected `latest` alias, with an enable switch and dry-run mode. Upstream must publish the alias before CI can run. Its approved configuration includes existing history after the initial commit, with legacy metadata handling through the fixed onboarding boundary. App settings are configured; live proposal/tag writes require validation and a separately reviewed activation. The PR template supplies structured changelog context.
+
 The proposed [production workflow](docs/operations/production-deployment.md) keeps PR previews and replaces automatic main releases with `Quality → production approval → staged smoke checks → promotion`. **Complete protected-environment and credential setup before merging that cutover.** The workflow refuses missing review/branch protections. GitHub shows the production environment URL, job summary and status badge. No live production workflow has been exercised yet.
 
 `pnpm build` generates static HTML for `/`, `/about`, `/projects`, `/projects/release-log` and `/404.html` with React’s server renderer, then hydrates in the browser. The project pages are emitted as directory index documents. Every valid page has a title, description, canonical URL and Open Graph metadata in its initial HTML and after client navigation. Unknown client routes clear valid-page metadata and set noindex. Fonts are self-hosted. Theme preference initializes before paint, persists when storage is available, and otherwise follows the OS until explicitly changed. No analytics, tracking, external font service or secret configuration is required.

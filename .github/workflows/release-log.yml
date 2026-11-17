@@ -1,0 +1,70 @@
+name: Release Log
+
+on:
+  pull_request_target:
+    types: [closed]
+    branches: [main]
+
+permissions:
+  contents: read
+  pull-requests: read
+
+concurrency:
+  group: release-log-${{ github.repository }}-main
+  cancel-in-progress: false
+
+jobs:
+  release:
+    # Enable after the App is set up; history boundaries are owner-approved.
+    if: github.event.pull_request.merged == true && vars.RELEASE_LOG_ENABLED == 'true'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    env:
+      # Owner-selected moving alias; upstream must publish it for CI to run.
+      RELEASE_LOG_IMAGE: ghcr.io/lhajoosten/release-log:latest
+      RELEASE_LOG_CONFIGURATION: >-
+        {"schemaVersion":2,"repository":"lhajoosten/lucjoosten.nl","repositoryId":1458711968,"releaseBranch":"main","releasePolicy":"release-policy-v1","contextPolicy":"required","changelog":{"verbosity":"concise","format":"compact"},"bootstrap":{"baselineSha":"ed051000556633e810eaee8d9d403516c299b823","onboardingSha":"93cce7c4b3b8ca65e9102af6316860d23e3dcc8a"}}
+    steps:
+      - name: Check out release history as data
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          ref: main
+          path: source
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Pull the published CLI
+        run: docker pull --platform linux/amd64 "$RELEASE_LOG_IMAGE"
+
+      - name: Prepare trusted release inputs
+        env:
+          RELEASE_BOT_USER_ID: ${{ vars.RELEASE_BOT_USER_ID }}
+        run: |
+          mkdir -p "$RUNNER_TEMP/release-log-inputs"
+          printf '%s\n' "$RELEASE_LOG_CONFIGURATION" > "$RUNNER_TEMP/release-log-inputs/config.json"
+          jq -n --argjson bot "$RELEASE_BOT_USER_ID" \
+            '{schemaVersion: 1, botUserId: $bot}' > "$RUNNER_TEMP/release-log-inputs/automation.json"
+          cp "$GITHUB_EVENT_PATH" "$RUNNER_TEMP/release-log-inputs/event.json"
+
+      - name: Mint a short-lived token for this repository
+        id: app
+        uses: actions/create-github-app-token@fee1f7d63c2ff003460e3d139729b119787bc349 # v2.2.2
+        with:
+          app-id: ${{ vars.RELEASE_APP_ID }}
+          private-key: ${{ secrets.RELEASE_APP_PRIVATE_KEY }}
+          permission-contents: write
+          permission-pull-requests: write
+
+      - name: Generate changelog proposal in dry-run mode
+        env:
+          RELEASE_LOG_APP_TOKEN: ${{ steps.app.outputs.token }}
+        run: |
+          docker run --rm --platform linux/amd64 --read-only --cap-drop ALL \
+            --security-opt no-new-privileges --user "$(id -u):$(id -g)" \
+            --tmpfs /tmp:rw,nosuid,nodev,noexec,size=64m \
+            --mount "type=bind,src=$GITHUB_WORKSPACE/source,dst=/source,readonly" \
+            --mount "type=bind,src=$RUNNER_TEMP/release-log-inputs,dst=/inputs,readonly" \
+            -e RELEASE_LOG_APP_TOKEN -e GITHUB_EVENT_NAME \
+            "$RELEASE_LOG_IMAGE" roll \
+            --config /inputs/config.json --automation /inputs/automation.json \
+            --repository /source --event /inputs/event.json --dry-run
