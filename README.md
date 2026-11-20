@@ -1,6 +1,6 @@
-# lucjoosten.nl
+# lucjoosten.nl [![Production](https://github.com/lhajoosten/lucjoosten.nl/actions/workflows/production.yml/badge.svg)](https://github.com/lhajoosten/lucjoosten.nl/actions/workflows/production.yml)
 
-[![Production](https://github.com/lhajoosten/lucjoosten.nl/actions/workflows/production.yml/badge.svg)](https://github.com/lhajoosten/lucjoosten.nl/actions/workflows/production.yml)
+<img width="2172" height="724" alt="lucjoosten nl-header" src="https://github.com/user-attachments/assets/d39c8ba7-54db-4bfd-bc7c-4067ef2b0d48" />
 
 Luc Joosten’s engineering portfolio. The foundation implements the approved Portfolio V2 homepage with React 19, TypeScript, Vite, Tailwind v4 and React Router. Phase 2 adds a projects index, a Release Log case study and an About page. No backend is required. Production runs on Vercel at [lucjoosten.nl](https://lucjoosten.nl).
 
