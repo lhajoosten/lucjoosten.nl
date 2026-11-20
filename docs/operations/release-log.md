@@ -1,38 +1,16 @@
 # Changelog automation
 
-The `Release Log` workflow pulls the published Linux/amd64 CLI container and runs
-`roll` directly. At the owner's explicit request on 2026-11-16, it pulls the moving
-alias `ghcr.io/lhajoosten/release-log:latest` on each run. Upstream must publish
-that alias; publishing a version tag such as `v0.3.0` alone does not create it.
-The inspected upstream instructions currently document only version/digest refs.
-CI does not build the tool from source or install its Node/pnpm dependencies.
-See the upstream [container instructions](https://github.com/lhajoosten/release-log/blob/main/docs/container.md#run-with-mounted-inputs)
-and [release policy](https://github.com/lhajoosten/release-log/blob/main/docs/release-policy.md).
+The `Release Log` workflow pulls the published Linux/amd64 v0.5.0 CLI container
+by digest and runs `roll --write`. Docker verifies the pinned digest on each
+pull. A pull failure stops the job before it mints the App token. See the upstream
+[container instructions](https://github.com/lhajoosten/release-log/blob/v0.5.0/docs/container.md#run-with-mounted-inputs)
+and [release policy](https://github.com/lhajoosten/release-log/blob/v0.5.0/docs/release-policy.md).
 
-Each run records the resolved digest in Docker's pull output. A rerun can receive
-a different image when upstream moves the alias. Missing/inaccessible aliases
-fail the pull before any App token is minted; there is no fallback to an older
-image or a source build.
-
-## Current state and intended behavior
-
-The job is staged for validation: `RELEASE_LOG_ENABLED` is `true` and the CLI uses
-`--dry-run`. The owner reports that the App is installed. The required repository
-Actions variable values and private-key secret name were verified as present;
-the key contents and installed permissions still require a live run to validate.
-No changelog has been generated and no live integration run has been verified.
-The `latest` pull was attempted on 2026-11-16 and returned `not found`; publication
-of that upstream alias remains the immediate prerequisite for container validation.
-The owner approved including existing history on 2026-11-16. The fixed history
-boundaries are recorded in the caller's trusted configuration.
-
-After setup, an ordinary PR merge into `main` runs capture and deterministic
-changelog generation. With live writes separately enabled, the bot maintains one
-release PR containing `CHANGELOG.md`, the proposed package version and captured
-inputs. A human reviews and merges it; the bot then tags that exact landing.
-Existing Quality, production triggers and protection settings remain in place.
-Tags do not initiate site deployment; merged release PRs still follow the existing
-main/Quality production approval path. No AI provider is needed.
+When `RELEASE_LOG_ENABLED` is `true`, an ordinary PR merge into `main` runs
+capture and deterministic changelog generation. The bot maintains one release
+PR containing `CHANGELOG.md`, the proposed package version and captured inputs.
+A human reviews and merges it, and the bot then tags that exact landing. Merged
+release PRs follow the main/Quality production approval path.
 
 ## Repository setup
 
@@ -71,27 +49,16 @@ later changes require normal PR metadata. Never invent a previous release tag or
 move onboarding forward on later runs. Initial adoption proposes `0.1.0`; the
 existing package version is also `0.1.0`, but is not evidence of a tagged release.
 
-## Validation and activation
+## Review the first proposal
 
-1. Ensure upstream publishes `latest`, review its release and workflow, and configure
-   the App settings above. The history boundaries are already approved.
-2. Merge the reviewed integration PR, then inspect a merged-PR run with
-   `--dry-run`. Closed but unmerged PRs are skipped. The container
-   supplies CLI diagnostics in run logs, not workflow outputs or a downloadable
-   changelog artifact. Inspect the captured range, warnings and proposed version.
-3. Resolve metadata, association or permission failures before enabling writes.
-   Historical entries through onboarding retain warnings rather than invented
-   context. New PRs need scoped conventional titles, unscoped conventional commit
-   messages and one valid release-context block; use the PR template. This change
-   does not add a pre-merge metadata gate.
-4. In a separately approved PR, change `--dry-run` to `--write`. This
-   enables proposals and exact-landing tags. Keep GitHub Release publication and
-   self-upgrade options omitted. Review the first generated release PR and
-   changelog before any human merge.
+After the activation PR merges, inspect the Release Log run for that merge and
+review the generated PR's captured range, warnings, proposed version and
+changelog. New PRs need scoped conventional titles, unscoped conventional
+commit messages and one valid release-context block. Use the PR template.
 
-Use the approved workflow revision on a new merge event after changing workflow
-code; an old dry-run event does not pick up later changes. Never substitute
-`GITHUB_TOKEN` for the App installation token.
+Use a new merge event to verify workflow changes. A rerun uses the workflow
+revision from its original event. The CLI authenticates with the App installation
+token.
 
 ## Recovery and upgrades
 
@@ -101,12 +68,9 @@ release-merge event; never tag the latest main tip instead. A tag already at the
 exact landing is reusable. Conflicting tags, edited generated proposals and
 deliberately closed proposals require human inspection before recovery.
 
-Set `RELEASE_LOG_ENABLED` to `false` to stop future runs; inspect any run already
-in progress separately. Disabling does not undo existing refs or proposals. Upstream
-controls tool upgrades through `latest`; it must preserve configuration and captured
-proposal compatibility. The job does not reconstruct older producer runtimes. If
-a new image cannot replay a pending proposal or prior release, stop and review a
-compatible image/runtime setup rather than rewriting capture identities. A reviewed
-workflow change can select a known compatible version/digest for recovery.
-Bootstrap/onboarding identities stay fixed. Do not delete or move tags as part of
-a rollback.
+Set `RELEASE_LOG_ENABLED` to `false` to stop future runs and inspect any run
+already in progress separately. Upgrade the image tag and digest together in a
+reviewed workflow change. Check that the new CLI can replay a pending proposal
+or prior release before upgrading. For recovery, select a compatible image in a
+reviewed workflow change and preserve capture identities, bootstrap/onboarding
+boundaries and existing tags.
