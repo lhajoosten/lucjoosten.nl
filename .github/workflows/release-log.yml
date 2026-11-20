@@ -20,8 +20,7 @@ jobs:
     runs-on: ubuntu-24.04
     timeout-minutes: 20
     env:
-      # Owner-selected moving alias; upstream must publish it for CI to run.
-      RELEASE_LOG_IMAGE: ghcr.io/lhajoosten/release-log:latest
+      RELEASE_LOG_IMAGE: ghcr.io/lhajoosten/release-log:v0.5.0@sha256:82a3a7aaeff016ec8536a0cffd6a682d62c709096010ed09962539ada4d9e0be
       RELEASE_LOG_CONFIGURATION: >-
         {"schemaVersion":2,"repository":"lhajoosten/lucjoosten.nl","repositoryId":1458711968,"releaseBranch":"main","releasePolicy":"release-policy-v1","contextPolicy":"required","changelog":{"verbosity":"concise","format":"compact"},"bootstrap":{"baselineSha":"ed051000556633e810eaee8d9d403516c299b823","onboardingSha":"93cce7c4b3b8ca65e9102af6316860d23e3dcc8a"}}
     steps:
@@ -55,7 +54,7 @@ jobs:
           permission-contents: write
           permission-pull-requests: write
 
-      - name: Generate changelog proposal in dry-run mode
+      - name: Maintain the changelog proposal or tag its landing
         env:
           RELEASE_LOG_APP_TOKEN: ${{ steps.app.outputs.token }}
         run: |
@@ -67,4 +66,4 @@ jobs:
             -e RELEASE_LOG_APP_TOKEN -e GITHUB_EVENT_NAME \
             "$RELEASE_LOG_IMAGE" roll \
             --config /inputs/config.json --automation /inputs/automation.json \
-            --repository /source --event /inputs/event.json --dry-run
+            --repository /source --event /inputs/event.json --write
