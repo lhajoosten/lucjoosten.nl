@@ -1,5 +1,5 @@
 {
-  "ignorePatterns": ["docs/engineering/**", "pnpm-lock.yaml"],
+  "ignorePatterns": ["/.release-log/inputs.json", "docs/engineering/**", "pnpm-lock.yaml"],
   "semi": true,
   "singleQuote": true,
   "printWidth": 100
