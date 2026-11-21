@@ -15,7 +15,23 @@ test.beforeEach(async ({ page }) => {
   );
 });
 
+const newCaseStudies = [
+  {
+    path: '/projects/upkeep',
+    title: 'Upkeep — Luc Joosten',
+    heading: 'Upkeep',
+    section: 'Local dependency discovery',
+  },
+  {
+    path: '/projects/lucjoosten-nl',
+    title: 'lucjoosten.nl — Luc Joosten',
+    heading: 'lucjoosten.nl',
+    section: 'Rendering the portfolio at build time',
+  },
+];
+
 const routes = [
+  ...newCaseStudies,
   { path: '/projects', title: 'Projects — Luc Joosten', heading: 'Engineering in practice.' },
   { path: '/projects/release-log', title: 'Release Log — Luc Joosten', heading: 'Release Log.' },
 ];
@@ -56,7 +72,7 @@ for (const route of routes) {
     }
     expect(
       await page
-        .locator('.project, .btn')
+        .locator('.project, .btn, .small-link')
         .first()
         .evaluate((element) => getComputedStyle(element).transitionDuration),
     ).toBe('0s');
@@ -83,18 +99,51 @@ for (const route of routes) {
       `https://lucjoosten.nl${route.path}`,
     );
     if (route.path === '/projects') {
-      await expect(page.getByRole('article')).toHaveCount(4);
+      await expect(page.getByRole('article')).toHaveCount(6);
+      for (const [name, url] of [
+        ['Release Log', 'https://github.com/lhajoosten/release-log'],
+        ['Azure AI Workbench', 'https://github.com/lhajoosten/azure-ai-workbench'],
+        ['lucjoosten.nl', 'https://github.com/lhajoosten/lucjoosten.nl'],
+      ] as const) {
+        const project = page.getByRole('article', { name, exact: true });
+        await expect(
+          project.getByRole('link', { name: `View the ${name} repository` }),
+        ).toHaveAttribute('href', url);
+      }
+      await expect(
+        page
+          .getByRole('article', { name: 'ReviewBot' })
+          .getByText(/terminal interface and dashboard/)
+          .first(),
+      ).toBeVisible();
+      await expect(
+        page.getByRole('article', { name: 'Azure AI Workbench' }).getByText(/AI-200/),
+      ).toBeVisible();
+      await expect(
+        page.getByRole('article', { name: 'kube-lab' }).getByText(/incident resolution/),
+      ).toBeVisible();
       const upkeep = page.getByRole('article', { name: 'Upkeep' });
       await expect(
         upkeep.getByText(/local, read-only Python dependency discovery/).last(),
       ).toBeVisible();
       await expect(upkeep.getByText(/Azure DevOps integration is planned/)).toBeVisible();
-      await expect(upkeep.getByRole('link')).toHaveCount(0);
+      await expect(upkeep.getByRole('link')).toHaveCount(1);
+      await expect(upkeep.getByRole('link', { name: 'Read the Upkeep case study' })).toBeVisible();
       await expect(page.getByText('Planning · documentation only')).toBeVisible();
-      await expect(page.getByText('Private · source unavailable')).toHaveCount(2);
+      await expect(page.getByText('Private · source unavailable')).toHaveCount(3);
+      await expect(page.getByRole('article', { name: 'kube-lab' }).getByRole('link')).toHaveCount(
+        0,
+      );
+      for (const study of newCaseStudies) {
+        await page.getByRole('link', { name: `Read the ${study.heading} case study` }).click();
+        await expect(page).toHaveTitle(study.title);
+        await expect(page.getByRole('heading', { name: study.section })).toBeVisible();
+        await page.getByRole('link', { name: 'Back to projects' }).first().click();
+        await expect(page).toHaveURL(/\/projects$/);
+      }
       await page.getByRole('link', { name: 'Read the Release Log case study' }).click();
       await expect(page.getByRole('heading', { level: 1 })).toHaveText('Release Log.');
-    } else {
+    } else if (route.path === '/projects/release-log') {
       await expect(page.getByRole('link', { name: 'Read the reviewed README' })).toHaveAttribute(
         'href',
         releaseLog.source.url,

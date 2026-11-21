@@ -40,23 +40,24 @@ test('projects retain reviewed status and expose only the available case study',
       <App />
     </MemoryRouter>,
   );
-  expect(screen.getAllByRole('article')).toHaveLength(4);
+  expect(screen.getAllByRole('article')).toHaveLength(6);
   expect(screen.getByRole('heading', { name: 'Upkeep' })).toBeInTheDocument();
   expect(screen.getByText('Private · local discovery available')).toBeInTheDocument();
   expect(
     screen.getByText(/The current release provides local, read-only Python/),
   ).toBeInTheDocument();
-  expect(screen.queryByRole('link', { name: /Upkeep/ })).not.toBeInTheDocument();
+  expect(
+    screen.queryByRole('link', { name: 'View the Upkeep repository' }),
+  ).not.toBeInTheDocument();
   expect(screen.getByText('Planning · documentation only')).toBeInTheDocument();
-  expect(screen.getAllByText('Private · source unavailable')).toHaveLength(2);
+  expect(screen.getAllByText('Private · source unavailable')).toHaveLength(3);
   expect(screen.getByRole('link', { name: 'Read the Release Log case study' })).toHaveAttribute(
     'href',
     '/projects/release-log',
   );
-  expect(screen.getByRole('link', { name: 'Read the Azure AI Workbench README' })).toHaveAttribute(
-    'href',
-    'https://github.com/lhajoosten/azure-ai-workbench',
-  );
+  expect(
+    screen.getByRole('link', { name: 'View the Azure AI Workbench repository' }),
+  ).toHaveAttribute('href', 'https://github.com/lhajoosten/azure-ai-workbench');
   expect(screen.queryByRole('link', { name: /ReviewBot/ })).not.toBeInTheDocument();
 });
 

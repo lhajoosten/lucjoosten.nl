@@ -43,7 +43,7 @@ export const projects = [
     category: 'Cloud & AI',
     summary: 'A study project planning a document-processing backend on Azure.',
     detail:
-      'Currently documentation only: a project brief, learning roadmap and exercises. The intended application explores document-processing jobs and AI backends on Azure. There is no application or deployed infrastructure yet.',
+      'Currently documentation only: a project brief, learning roadmap and exercises. The study material supports AI-200 preparation through a planned document-processing backend on Azure. There is no application or deployed infrastructure yet.',
     status: 'Planning · documentation only',
     tags: ['Azure', 'AI engineering', 'Learning'],
     diagram: 'cloud',
@@ -53,12 +53,40 @@ export const projects = [
     slug: 'reviewbot',
     title: 'ReviewBot',
     category: 'Personal project',
-    summary: 'A private project. A public engineering overview is being prepared.',
+    summary:
+      'A private project exploring a review workflow through a terminal interface and dashboard.',
     detail:
-      'This repository is private. A public case study is in preparation; source code is not publicly available.',
+      'The terminal interface and dashboard are two ways into the review workflow. A public engineering overview is in preparation.',
     status: 'Private · overview pending',
     tags: ['Private project'],
     diagram: 'review',
     repository: { visibility: 'private' },
   },
+  {
+    slug: 'kube-lab',
+    title: 'kube-lab',
+    category: 'Cloud operations',
+    summary: 'A lab exploring incident response with a Kubernetes dashboard and bot.',
+    detail:
+      'The intended workflow brings a dashboard and bot into incident resolution so operators can work through an incident in a lab setting.',
+    status: 'Private · intended workflow',
+    tags: ['Kubernetes', 'Incident response'],
+    diagram: 'cloud',
+    repository: { visibility: 'private' },
+  },
+  {
+    slug: 'lucjoosten-nl',
+    title: 'lucjoosten.nl',
+    category: 'Web engineering',
+    summary: 'A static React portfolio with client-side navigation and prerendered pages.',
+    detail:
+      'The build renders the homepage, About page, and project routes to HTML. React adds interactive navigation and theme controls in the browser.',
+    status: 'Live · static site',
+    tags: ['React', 'TypeScript', 'Vite'],
+    diagram: 'release',
+    repository: { visibility: 'public', url: 'https://github.com/lhajoosten/lucjoosten.nl' },
+  },
 ] as const satisfies readonly HomepageProject[];
+
+// The homepage retains its existing selection and order.
+export const homepageProjects = [projects[0], projects[1], projects[2], projects[3]] as const;

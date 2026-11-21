@@ -1,6 +1,6 @@
 import { Link } from 'react-router';
 import { useRef, useState } from 'react';
-import { projects } from '../content/projects';
+import { homepageProjects as projects } from '../content/projects';
 import type { HomepageProject } from '../content/projects';
 import { ProjectDiagram } from './ProjectDiagram';
 

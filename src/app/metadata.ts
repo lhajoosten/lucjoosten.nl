@@ -1,3 +1,4 @@
+import { projectCaseStudies } from '../content/project-case-studies.ts';
 const origin = 'https://lucjoosten.nl';
 
 export type PageMetadata = {
@@ -23,7 +24,7 @@ export const pages: readonly PageMetadata[] = [
     path: '/projects',
     title: 'Projects — Luc Joosten',
     description:
-      'Explore Luc Joosten’s curated projects in developer tooling and cloud engineering, with current status and a Release Log case study.',
+      'Explore Luc Joosten’s curated projects in developer tooling and cloud engineering, with current status and project case studies.',
   },
   {
     path: '/projects/release-log',
@@ -31,6 +32,11 @@ export const pages: readonly PageMetadata[] = [
     description:
       'Release Log: a packaged TypeScript CLI for deterministic changelogs, reviewed release PRs and exact version tagging, with clear AI boundaries.',
   },
+  ...projectCaseStudies.map(({ project }) => ({
+    path: `/projects/${project.slug}`,
+    title: `${project.title} — Luc Joosten`,
+    description: project.summary,
+  })),
 ];
 
 const notFound: PageMetadata = {
