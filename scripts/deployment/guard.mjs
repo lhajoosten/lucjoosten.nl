@@ -18,13 +18,6 @@ export function validateRun(run, repository, sha, workflowSha) {
 }
 
 export function validateEnvironment(environment, policies) {
-  const reviewers = environment.protection_rules?.find(
-    (rule) => rule.type === 'required_reviewers',
-  );
-  if (!reviewers?.reviewers?.length)
-    throw new Error(
-      'Configure required reviewers on the production environment before enabling deployment.',
-    );
   if (
     environment.deployment_branch_policy?.custom_branch_policies !== true ||
     environment.deployment_branch_policy?.protected_branches !== false ||

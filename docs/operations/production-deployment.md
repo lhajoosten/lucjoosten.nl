@@ -1,21 +1,16 @@
 # Production deployment
 
-The proposed `Production` GitHub Actions workflow replaces automatic Vercel Git deployment of main. PR previews remain enabled and independent of Quality. The workflow uses the successful main **push** Quality run, requires approval, builds its exact SHA, stages a production-target build, smoke-tests it, promotes it and checks the public site.
+The `Production` GitHub Actions workflow uses a successful main **push** Quality run to build its exact SHA, stage a production-target build, smoke-test it, promote it and check the public site. Vercel handles previews for PR branches. Its Git-triggered deployment for main is disabled in `vercel.json`.
 
-## Before merging the cutover PR
+## Enable automatic deployments
 
-The workflow PR is intentionally a draft until these prerequisites are complete. No GitHub environment existed during read-only inspection on 2026-11-15, and no settings or secrets were changed.
+1. Merge the reviewed workflow change that removes the reviewer requirement from the deployment guard.
+2. In GitHub under **Settings → Environments → production**, clear **Required reviewers** and save. Keep **Selected branches and tags** with exactly one **branch** rule named `main`. Keep the environment secrets and administrative bypass setting.
+3. Check the current-main Production run in GitHub Actions. If GitHub leaves it waiting for the old reviewer rule, cancel that waiting run and re-run Quality for the current main SHA to start a fresh Production run. Verify the Production run completes successfully.
 
-1. Create a GitHub environment named `production`. Add at least one required reviewer. Configure **selected branches and tags** with exactly one **branch** rule named `main`; no tag rule or wildcard. Confirm that required reviewer protection is enforced by the account/plan. Keep administrative bypass restricted by owner policy; the workflow itself never bypasses approval.
-2. In that environment, configure `VERCEL_TOKEN` with the narrowest supported scope that can build, deploy and promote project `lucjoosten-nl` in team `lhajoosten-dev`. Configure `VERCEL_AUTOMATION_BYPASS_SECRET` for smoke requests against the protected staged deployment. Configure values directly in the provider UI; never put tokens in chat, source, command arguments or logs. Do not use repository-wide secrets for these names.
-3. Verify the workflow's fixed team/project IDs against the intended Vercel project. The CLI is pinned to `65.16.0`; action revisions were resolved from the existing v4 action lines and pinned. Review updates before changing pins. Vercel's CLI supports `VERCEL_TOKEN` authentication; no `--token` argument is used.
-4. Confirm the `Quality` workflow remains enabled for pushes to main. This repository uses PR review as the merge gate. The production environment and token are the additional deployment gate.
-5. Review and merge only with explicit owner approval. The PR changes `git.deploymentEnabled.main` to false, so that merge should stop the independent Git-triggered production release. Other branches default to enabled and retain previews. Leave the Vercel Git connection installed.
-6. Wait for the merge SHA's main Quality run. The separate Production workflow runs preflight, then appears under GitHub Actions awaiting environment approval. Approve only the desired SHA. The environment job automatically creates a GitHub deployment record with the production URL; preflight requires its workflow SHA to equal the tested SHA.
+For a new environment, configure `VERCEL_TOKEN` for Vercel project `lucjoosten-nl` in team `lhajoosten-dev` and `VERCEL_AUTOMATION_BYPASS_SECRET` for staged smoke requests. Store both as `production` environment secrets. Confirm the workflow's fixed team and project IDs against Vercel before running it.
 
-Do not merge the cutover before setup: the guard will refuse production work, while automatic main deployment will already be disabled. The existing production deployment stays live during setup and while approval is pending.
-
-## What happens after approval
+## Deployment sequence
 
 The workflow rechecks Quality, main and environment protection, installs pinned tooling, pulls production configuration, builds the exact checked-out SHA and uploads it with `--prebuilt --prod --skip-domain`. Generated `.vercel/` state and any pulled configuration stay on the ephemeral runner and are excluded from Git. No secret-bearing artifacts are uploaded.
 
@@ -25,18 +20,18 @@ Immediately before promotion, the workflow rechecks current main and environment
 
 ## Repository visibility
 
-Use the README's **Production** workflow badge, the Actions tab, job summaries and the GitHub **production** environment/deployment history. A green Quality/PR preview check does not mean a production release occurred. The production badge may have no run data until the workflow reaches main and receives its first eligible completion event.
+Use the README's **Production** workflow badge, the Actions tab, job summaries and the GitHub **production** environment/deployment history. A green Quality/PR preview check does not mean a production release occurred.
 
 ## Recovery
 
-- A missing environment, reviewer, branch rule or credential fails before deployment. Complete setup, then re-run the successful current-main Quality workflow to produce a fresh eligible completion event. Production workflows are intentionally not manually dispatchable on arbitrary refs.
-- If main advances while an older run waits for approval, reject/cancel that waiting run. A mistakenly approved older run fails its guard; the newer run can then proceed. Do not cancel during promotion; concurrency is configured to avoid doing so automatically.
+- A missing environment, branch rule or credential fails before deployment. Complete setup, then re-run the successful current-main Quality workflow to produce a fresh eligible completion event. Production workflows are intentionally not manually dispatchable on arbitrary refs.
+- If main advances, the guard rejects older SHAs before staging or promotion. Let any promotion already underway finish. The workflow serializes production runs.
 - If staging/build/smoke fails before promotion, the existing production deployment remains live. Fix through a new reviewed PR and deploy the new successful main SHA.
 - If promotion fails with `User not found. (404)` under CLI 65.16.0 after staging succeeds, the CLI’s personal-user lookup can fail despite valid team project access. Do not rotate working credentials merely on that evidence. The promotion helper calls the [production promotion API](https://vercel.com/docs/rest-api/projects/point-production-traffic-to-a-given-deployment) with the fixed team ID and avoids that lookup. Inspect the staged deployment and alias status before any retry after a network error or timeout; the server may already have accepted the request.
 - If public checks fail after promotion, inspect the exact deployment and make an explicit owner-approved rollback or fix-forward decision. Workflow reruns check current main again.
 - Re-enabling automatic Vercel main deployments is a separate reviewed cutover, alongside disabling the Production workflow, to prevent duplicate releases. Never change DNS as part of workflow recovery.
 
-Local guard/smoke tests and actionlint validate the code and workflow structure; they cannot prove GitHub approval or Vercel promotion end to end. The first live run needs separate explicit approval and must be recorded with its actual outcome.
+Local guard/smoke tests and actionlint validate the code and workflow structure. Verify the first automatic run in GitHub and check the production domain.
 
 ## Recovery evidence — 2026-11-16
 

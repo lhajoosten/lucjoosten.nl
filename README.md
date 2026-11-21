@@ -53,7 +53,7 @@ Release Log’s expanded case study covers its packaged CLI, human-reviewed rele
 
 The [Release Log CI integration](docs/operations/release-log.md) runs the digest-pinned v0.5.0 CLI when a PR merges and `RELEASE_LOG_ENABLED` is `true`. The bot maintains a changelog proposal and tags its landing after a human merges it. The initial proposal includes existing history after the initial commit, with legacy metadata handling through the fixed onboarding boundary. The PR template supplies structured changelog context.
 
-The proposed [production workflow](docs/operations/production-deployment.md) keeps PR previews and replaces automatic main releases with `Quality → production approval → staged smoke checks → promotion`. **Complete protected-environment and credential setup before merging that cutover.** The workflow refuses missing review/branch protections. GitHub shows the production environment URL, job summary and status badge. No live production workflow has been exercised yet.
+The [production workflow](docs/operations/production-deployment.md) deploys automatically after a successful main Quality run. It builds the exact tested commit, runs staged smoke checks, promotes the build and verifies the public site. GitHub shows the production environment URL, job summary and status badge. PR previews are available through Vercel.
 
 `pnpm build` generates static HTML for `/`, `/about`, `/projects`, `/projects/release-log` and `/404.html` with React’s server renderer, then hydrates in the browser. The project pages are emitted as directory index documents. Every valid page has a title, description, canonical URL and Open Graph metadata in its initial HTML and after client navigation. Unknown client routes clear valid-page metadata and set noindex. Fonts are self-hosted. Theme preference initializes before paint, persists when storage is available, and otherwise follows the OS until explicitly changed. No analytics, tracking, external font service or secret configuration is required.
 
@@ -63,7 +63,7 @@ The workspace has its own Git metadata for `lhajoosten/lucjoosten.nl`. The initi
 
 ## Next milestones
 
-Phase 2 continues with separately scoped case studies and secondary pages, then Phase 3 introduces validated Markdown/MDX, draft exclusion, feeds and content routes. Phase 4 adds explicit source allowlists and reviewed agent publishing instructions. Scheduled automation is deferred. Before publication, all content changes require a reviewed PR and deployment requires explicit owner approval.
+Phase 2 continues with separately scoped case studies and secondary pages, then Phase 3 introduces validated Markdown/MDX, draft exclusion, feeds and content routes. Phase 4 adds explicit source allowlists and reviewed agent publishing instructions. Scheduled automation is deferred. Before publication, all content changes require a reviewed PR.
 
 Known limits: automated axe checks do not replace assistive-technology testing; no Safari/Firefox test matrix is configured yet. No social preview image, RSS, sitemap, full content schemas or agent collection pipeline is included in Phase 1. With JavaScript disabled the homepage, project pages and ordinary navigation/source links remain readable; theme controls, project dialogs and the mobile menu require JavaScript.
 
@@ -73,4 +73,4 @@ Phase 1 is merged and live. The owner merged [PR #1](https://github.com/lhajoost
 
 Earlier live checks on the initially approved commit `6e14b18e24a13fd67646bd101992f59d48541240` verified public HTTPS responses: homepage, JavaScript and CSS returned 200; `www` redirected to the canonical domain with HTTP 308; an unknown URL returned the custom page with HTTP 404. Live Chromium smoke tests passed at 1440px and 390px, covering hydration, theme persistence, project dialogs, responsive width, mobile navigation and no page errors. The post-launch 15-minute Vercel error/fatal runtime-log query returned no entries. No external log drains were configured. These are historical, point-in-time results; the browser, HTTP and runtime-log checks were not rerun for this documentation update.
 
-Both domains reported valid DNS configuration in Vercel during initial publication. Preserve unrelated GoDaddy DNS records, especially email records. Any later production deployment still requires explicit owner approval.
+Both domains reported valid DNS configuration in Vercel during initial publication. Preserve unrelated GoDaddy DNS records, especially email records.

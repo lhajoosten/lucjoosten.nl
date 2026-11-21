@@ -22,7 +22,7 @@ function state() {
     },
     '/git/ref/heads/main': { object: { sha } },
     '/environments/production': {
-      protection_rules: [{ type: 'required_reviewers', reviewers: [{ type: 'User' }] }],
+      protection_rules: [{ type: 'branch_policy' }],
       deployment_branch_policy: { custom_branch_policies: true, protected_branches: false },
     },
     '/environments/production/deployment-branch-policies?per_page=100': {
@@ -33,7 +33,7 @@ function state() {
 const check = (data, workflowSha = sha) =>
   guard({ repository, sha, workflowSha, runId: 1, github: async (path) => data[path] });
 
-test('successful current main with enforced review and main-only policy is eligible', async () => {
+test('successful current main with main-only policy can deploy automatically', async () => {
   await check(state());
 });
 for (const [name, field, value] of [
@@ -54,16 +54,13 @@ test('rejects a stale run and workflow/deployment SHA mismatch', async () => {
   await assert.rejects(check(data), /stale/);
   await assert.rejects(check(state(), 'b'.repeat(40)));
 });
-test('rejects missing human approval and broad branch policies', async () => {
+test('rejects broad environment branch policies', async () => {
   const data = state();
-  data['/environments/production'].protection_rules = [];
-  await assert.rejects(check(data), /reviewers/);
-  const broad = state();
-  broad['/environments/production/deployment-branch-policies?per_page=100'].branch_policies.push({
+  data['/environments/production/deployment-branch-policies?per_page=100'].branch_policies.push({
     name: '*',
     type: 'branch',
   });
-  await assert.rejects(check(broad), /only the main/);
+  await assert.rejects(check(data), /only the main/);
 });
 
 const expected = [
