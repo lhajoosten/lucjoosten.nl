@@ -1,12 +1,11 @@
 # Changelog automation
 
-The `Release Log` workflow pulls the published Linux/amd64 v0.5.0 CLI container
-by digest and runs `roll --write`. Docker verifies the pinned digest on each
-pull. A pull failure stops the job before it mints the App token. See the upstream
-[container instructions](https://github.com/lhajoosten/release-log/blob/v0.5.0/docs/container.md#run-with-mounted-inputs)
-and [release policy](https://github.com/lhajoosten/release-log/blob/v0.5.0/docs/release-policy.md).
+The workflow previews releases with `ghcr.io/lhajoosten/release-log:latest`
+using a repository-scoped read-only token. A separate SHA-pinned job recomputes
+the release using fresh GitHub evidence and receives its own write token. The
+preview passes no output or artifacts to the writer.
 
-When `RELEASE_LOG_ENABLED` is `true`, an ordinary PR merge into `main` runs
+When the App is configured, an ordinary PR merge into `main` runs
 capture and deterministic changelog generation. The bot maintains one release
 PR containing `CHANGELOG.md`, the proposed package version and captured inputs.
 A human reviews and merges it, and the bot then tags that exact landing. Merged
@@ -18,28 +17,27 @@ to preserve the exact bytes recorded in the proposal.
 ## Repository setup
 
 Install the Release Log GitHub App for `lhajoosten/lucjoosten.nl`, with Contents
-and Pull requests write permissions. The token action requests these even for
-dry runs. Its installation token can write repository contents; it is not technically
-confined to a release branch. Keep credentials out of this repository and logs.
+and Pull requests write permissions for the pinned writer. The preview requests
+read access to those resources. Keep credentials out of this repository and logs.
 
 Configure these repository Actions settings:
 
-| Kind     | Name                      | Value                                                                        |
-| -------- | ------------------------- | ---------------------------------------------------------------------------- |
-| Variable | `RELEASE_APP_ID`          | The installed App's ID                                                       |
-| Variable | `RELEASE_BOT_USER_ID`     | The App bot account's numeric user ID, distinct from the App/installation ID |
-| Secret   | `RELEASE_APP_PRIVATE_KEY` | The App's private key                                                        |
-| Variable | `RELEASE_LOG_ENABLED`     | `true`, after the other settings are ready                                   |
+| Kind     | Name                        | Value                                                                        |
+| -------- | --------------------------- | ---------------------------------------------------------------------------- |
+| Variable | `RELEASE_APP_ID`            | The installed App's ID                                                       |
+| Variable | `RELEASE_BOT_USER_ID`       | The App bot account's numeric user ID, distinct from the App/installation ID |
+| Secret   | `RELEASE_APP_PRIVATE_KEY`   | The App's private key                                                        |
+| Variable | `RELEASE_LOG_WRITE_ENABLED` | Set to `false` to keep previews and disable writes                           |
 
 Configuration is trusted input embedded in the reviewed
 [workflow](../../.github/workflows/release-log.yml), not a file loaded from
 a PR head or a mutable configuration variable. Changes alter captured identities
-and need PR review, just like image updates. Full main history and tags are checked
+and need PR review. Full main history and tags are checked
 out without persisted credentials and mounted read-only alongside trusted config,
 bot identity and event files. The container uses the host UID/GID, a read-only root
 filesystem, dropped capabilities and temporary scratch space. Network access is
-enabled for GitHub API reads. The App token is minted after the image pull and
-passed only to `roll` at runtime; the private key goes only to the token action.
+enabled for GitHub API reads. Each job mints its own App token. The App private
+key goes only to the token action.
 Consumer code and dependency scripts are not executed. Runs are serialized per
 repository/main branch without cancellation.
 
@@ -71,9 +69,8 @@ release-merge event; never tag the latest main tip instead. A tag already at the
 exact landing is reusable. Conflicting tags, edited generated proposals and
 deliberately closed proposals require human inspection before recovery.
 
-Set `RELEASE_LOG_ENABLED` to `false` to stop future runs and inspect any run
-already in progress separately. Upgrade the image tag and digest together in a
-reviewed workflow change. Check that the new CLI can replay a pending proposal
-or prior release before upgrading. For recovery, select a compatible image in a
-reviewed workflow change and preserve capture identities, bootstrap/onboarding
-boundaries and existing tags.
+Set `RELEASE_LOG_WRITE_ENABLED` to `false` to disable future writes and keep
+previews. Inspect an in-progress run separately. The preview follows the latest
+stable image. To upgrade the writer, review the matching immutable workflow and
+tool SHA and keep the trusted replay runtimes needed by existing proposals.
+Preserve capture identities, bootstrap/onboarding boundaries and existing tags.

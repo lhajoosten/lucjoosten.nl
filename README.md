@@ -51,7 +51,7 @@ Release Log’s expanded case study covers its packaged CLI, human-reviewed rele
 
 ## Build and hosting
 
-The [Release Log CI integration](docs/operations/release-log.md) runs the digest-pinned v0.5.0 CLI when a PR merges and `RELEASE_LOG_ENABLED` is `true`. The bot maintains a changelog proposal and tags its landing after a human merges it. The initial proposal includes existing history after the initial commit, with legacy metadata handling through the fixed onboarding boundary. The PR template supplies structured changelog context.
+The [Release Log CI integration](docs/operations/release-log.md) previews releases with the latest stable CLI and uses a separate pinned writer when the Release Log App is configured. The bot maintains a changelog proposal and tags its landing after a human merges it. The initial proposal includes existing history after the initial commit, with legacy metadata handling through the fixed onboarding boundary. The PR template supplies structured changelog context.
 
 The [production workflow](docs/operations/production-deployment.md) deploys automatically after a successful main Quality run. It builds the exact tested commit, runs staged smoke checks, promotes the build and verifies the public site. GitHub shows the production environment URL, job summary and status badge. PR previews are available through Vercel.
 
