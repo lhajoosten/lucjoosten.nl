@@ -1,7 +1,5 @@
 # Changelog
 
-<!-- release-log:pending:v1 sha256:594f0f14ae0eaa2a0587311f67d78809f99b752a870f090ddbbe6b4088692749 -->
-
 ## v0.1.0 (2026-11-20)
 
 Initial release of the captured repository state.
@@ -35,7 +33,6 @@ Initial release of the captured repository state.
 - Integrate Release Log changelog generation using the latest CLI container&#46; ([#10](https://github.com/lhajoosten/lucjoosten.nl/pull/10)) by [&#64;lhajoosten](https://github.com/lhajoosten)
 - Enable changelog proposal generation with the digest&#45;pinned Release Log v0&#46;5&#46;0 container&#46; ([#11](https://github.com/lhajoosten/lucjoosten.nl/pull/11)) by [&#64;lhajoosten](https://github.com/lhajoosten)
 - Preserve the Release Log snapshot bytes during formatting checks&#46; ([#13](https://github.com/lhajoosten/lucjoosten.nl/pull/13)) by [&#64;lhajoosten](https://github.com/lhajoosten)
+- Update the repository README header and move the production status badge&#46; ([#14](https://github.com/lhajoosten/lucjoosten.nl/pull/14)) by [&#64;lhajoosten](https://github.com/lhajoosten)
 
 </details>
-
-<!-- release-log:pending:end -->
