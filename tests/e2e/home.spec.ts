@@ -77,7 +77,7 @@ test('project dialog traps and restores focus and respects repository visibility
   page,
 }) => {
   await page.goto('/');
-  const project = page.getByRole('button', { name: 'Read about Release Log' });
+  const project = page.getByRole('button', { name: 'Read about Rolling Release' });
   await project.click();
   const dialog = page.getByRole('dialog');
   await expect(dialog).toBeVisible();
