@@ -90,7 +90,7 @@ test('project dialog traps and restores focus and respects repository visibility
   await expect(dialog).not.toBeVisible();
   await expect(project).toBeFocused();
   await page.getByRole('button', { name: 'Read about ReviewBot' }).click();
-  await expect(dialog).toContainText('This repository is private');
+  await expect(dialog.getByText('Private · source unavailable')).toBeVisible();
   await expect(dialog.getByRole('link')).toHaveCount(0);
   await close.click();
   await expect(dialog).not.toBeVisible();

@@ -1,3 +1,5 @@
+import { ProjectCaseStudyPage } from './ProjectCaseStudyPage';
+import { projectCaseStudies } from '../content/project-case-studies';
 import { useEffect, useRef } from 'react';
 import { Link, Route, Routes, useLocation } from 'react-router';
 import { Header } from '../components/Header';
@@ -34,6 +36,14 @@ export function App() {
           <Route caseSensitive path="/about" element={<AboutPage />} />
           <Route caseSensitive path="/projects" element={<ProjectsPage />} />
           <Route caseSensitive path="/projects/release-log" element={<ReleaseLogPage />} />
+          {projectCaseStudies.map((study) => (
+            <Route
+              caseSensitive
+              key={study.project.slug}
+              path={`/projects/${study.project.slug}`}
+              element={<ProjectCaseStudyPage study={study} />}
+            />
+          ))}
           <Route
             path="*"
             element={
