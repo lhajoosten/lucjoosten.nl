@@ -7,10 +7,7 @@ export type HomepageProject = {
   status: string;
   tags: readonly string[];
   diagram: 'review' | 'cloud' | 'release';
-  repository:
-    | { visibility: 'public'; url: string }
-    | { visibility: 'private' }
-    | { visibility: 'unconfirmed' };
+  repository: { visibility: 'public'; url: string } | { visibility: 'private' };
 };
 
 // Reviewed summaries shared by the homepage and projects index.
@@ -72,10 +69,10 @@ export const projects = [
     summary: 'A lab exploring incident response with a Kubernetes dashboard and bot.',
     detail:
       'The intended workflow brings a dashboard and bot into incident resolution so operators can work through an incident in a lab setting.',
-    status: 'Lab · intended workflow',
+    status: 'Private · intended workflow',
     tags: ['Kubernetes', 'Incident response'],
     diagram: 'cloud',
-    repository: { visibility: 'unconfirmed' },
+    repository: { visibility: 'private' },
   },
   {
     slug: 'lucjoosten-nl',

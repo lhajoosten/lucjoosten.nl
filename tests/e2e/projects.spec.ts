@@ -130,7 +130,10 @@ for (const route of routes) {
       await expect(upkeep.getByRole('link')).toHaveCount(1);
       await expect(upkeep.getByRole('link', { name: 'Read the Upkeep case study' })).toBeVisible();
       await expect(page.getByText('Planning · documentation only')).toBeVisible();
-      await expect(page.getByText('Private · source unavailable')).toHaveCount(2);
+      await expect(page.getByText('Private · source unavailable')).toHaveCount(3);
+      await expect(page.getByRole('article', { name: 'kube-lab' }).getByRole('link')).toHaveCount(
+        0,
+      );
       for (const study of newCaseStudies) {
         await page.getByRole('link', { name: `Read the ${study.heading} case study` }).click();
         await expect(page).toHaveTitle(study.title);

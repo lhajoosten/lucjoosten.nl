@@ -50,7 +50,7 @@ test('projects retain reviewed status and expose only the available case study',
     screen.queryByRole('link', { name: 'View the Upkeep repository' }),
   ).not.toBeInTheDocument();
   expect(screen.getByText('Planning · documentation only')).toBeInTheDocument();
-  expect(screen.getAllByText('Private · source unavailable')).toHaveLength(2);
+  expect(screen.getAllByText('Private · source unavailable')).toHaveLength(3);
   expect(screen.getByRole('link', { name: 'Read the Release Log case study' })).toHaveAttribute(
     'href',
     '/projects/release-log',
