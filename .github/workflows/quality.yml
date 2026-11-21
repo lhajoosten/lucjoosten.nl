@@ -3,6 +3,7 @@ on:
   push:
     branches: [main]
   pull_request:
+    types: [opened, synchronize, reopened, edited]
 permissions:
   contents: read
 jobs:
@@ -11,11 +12,18 @@ jobs:
     timeout-minutes: 15
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.ref == 'release-log/main' && 2 || 1 }}
       - uses: pnpm/action-setup@v4
       - uses: actions/setup-node@v4
         with:
           node-version-file: .node-version
           cache: pnpm
+      - name: Verify generated release proposal head
+        if: github.event_name == 'pull_request' && github.event.pull_request.head.ref == 'release-log/main'
+        env:
+          RELEASE_BOT_USER_ID: ${{ vars.RELEASE_BOT_USER_ID }}
+        run: node scripts/release/check-proposal.mjs
       - run: pnpm install --frozen-lockfile
       - run: pnpm check
       - run: pnpm build

@@ -22,7 +22,26 @@ jobs:
     env:
       RELEASE_LOG_IMAGE: ghcr.io/lhajoosten/release-log:v0.5.0@sha256:82a3a7aaeff016ec8536a0cffd6a682d62c709096010ed09962539ada4d9e0be
       RELEASE_LOG_CONFIGURATION: >-
-        {"schemaVersion":2,"repository":"lhajoosten/lucjoosten.nl","repositoryId":1458711968,"releaseBranch":"main","releasePolicy":"release-policy-v1","contextPolicy":"required","changelog":{"verbosity":"concise","format":"compact"},"bootstrap":{"baselineSha":"ed051000556633e810eaee8d9d403516c299b823","onboardingSha":"93cce7c4b3b8ca65e9102af6316860d23e3dcc8a"}}
+        {
+          "schemaVersion": 2,
+          "repository": "lhajoosten/lucjoosten.nl",
+          "repositoryId": 1458711968,
+          "releaseBranch": "main",
+          "releasePolicy": "release-policy-v1",
+          "contextPolicy": "required",
+          "changelog": {"verbosity": "concise", "format": "compact"},
+          "bootstrap": {
+            "baselineSha": "ed051000556633e810eaee8d9d403516c299b823",
+            "onboardingSha": "93cce7c4b3b8ca65e9102af6316860d23e3dcc8a"
+          },
+          "adoptedRelease": {
+            "pullNumber": 12,
+            "headSha": "e00761aed3c185582b26b09c2c7ca97cb325e849",
+            "landingSha": "50028db1e409a3948e376505d2bf7c7f291bcf27",
+            "commitSha": "eb4e5115ebae8433b04fe0c74fc6e92f48a6b72f",
+            "tag": "v0.1.0"
+          }
+        }
     steps:
       - name: Check out release history as data
         uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4

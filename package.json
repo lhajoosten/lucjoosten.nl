@@ -14,7 +14,8 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "test:e2e": "playwright test",
-    "check": "pnpm format:check && pnpm lint && pnpm typecheck && pnpm test && pnpm test:deployment",
+    "check": "pnpm format:check && pnpm lint && pnpm typecheck && pnpm test && pnpm test:release && pnpm test:deployment",
+    "test:release": "node --test scripts/release/check-proposal.test.mjs",
     "test:deployment": "node scripts/deployment/deployment.test.mjs && node scripts/deployment/promote.test.mjs"
   },
   "dependencies": {
