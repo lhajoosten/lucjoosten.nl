@@ -23,7 +23,7 @@ export function ReleaseLogAvailability() {
       <p>Follow the upstream instructions for the published container and its verified digest.</p>
       <a
         className="btn secondary"
-        href="https://github.com/lhajoosten/release-log/blob/main/README.md#run-the-published-cli"
+        href="https://github.com/lhajoosten/rolling-release/blob/main/README.md#run-the-published-cli"
         target="_blank"
         rel="noreferrer"
       >
@@ -33,11 +33,11 @@ export function ReleaseLogAvailability() {
         {version ? (
           <>
             Latest stable tag:{' '}
-            <a href={`https://github.com/lhajoosten/release-log/tree/${version}`}>{version}</a>.
+            <a href={`https://github.com/lhajoosten/rolling-release/tree/${version}`}>{version}</a>.
             Container availability is listed in the upstream instructions.
           </>
         ) : (
-          <a href="https://github.com/lhajoosten/release-log/tags">Browse version tags on GitHub</a>
+          <a href="https://github.com/lhajoosten/rolling-release/tags">Browse version tags on GitHub</a>
         )}
       </p>
     </section>

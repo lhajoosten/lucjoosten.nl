@@ -1,4 +1,4 @@
-name: Release Log
+name: Rolling Release
 
 on:
   pull_request_target:
@@ -15,7 +15,7 @@ concurrency:
 
 jobs:
   preview:
-    name: Preview with Release Log latest
+    name: Preview with Rolling Release latest
     if: >-
       github.event.pull_request.merged == true &&
       vars.RELEASE_APP_ID != '' &&
