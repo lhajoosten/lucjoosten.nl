@@ -1,4 +1,4 @@
-export type HomepageProject = {
+export type Project = {
   slug: string;
   title: string;
   category: string;
@@ -11,8 +11,8 @@ export type HomepageProject = {
 };
 
 // Reviewed summaries shared by the homepage and projects index.
-export const projects = [
-  {
+export const projectCatalog = {
+  'release-log': {
     slug: 'release-log',
     title: 'Release Log',
     category: 'Developer tooling',
@@ -25,7 +25,19 @@ export const projects = [
     diagram: 'release',
     repository: { visibility: 'public', url: 'https://github.com/lhajoosten/release-log' },
   },
-  {
+  'lint-action': {
+    slug: 'lint-action',
+    title: 'Lint Action',
+    category: 'Developer tooling',
+    summary: 'A Rust CLI and GitHub Action that check cyclomatic complexity across four languages.',
+    detail:
+      'Lint Action uses Tree-sitter to score callables in Rust, TypeScript, TSX and Python. Teams can report findings, enforce limits immediately or adopt a baseline for existing exceptions.',
+    status: 'Implemented · CLI and GitHub Action',
+    tags: ['Rust', 'Tree-sitter', 'GitHub Actions'],
+    diagram: 'review',
+    repository: { visibility: 'public', url: 'https://github.com/lhajoosten/lint-action' },
+  },
+  upkeep: {
     slug: 'upkeep',
     title: 'Upkeep',
     category: 'Developer tooling',
@@ -37,7 +49,7 @@ export const projects = [
     diagram: 'review',
     repository: { visibility: 'private' },
   },
-  {
+  'azure-ai-workbench': {
     slug: 'azure-ai-workbench',
     title: 'Azure AI Workbench',
     category: 'Cloud & AI',
@@ -49,7 +61,7 @@ export const projects = [
     diagram: 'cloud',
     repository: { visibility: 'public', url: 'https://github.com/lhajoosten/azure-ai-workbench' },
   },
-  {
+  reviewbot: {
     slug: 'reviewbot',
     title: 'ReviewBot',
     category: 'Personal project',
@@ -62,7 +74,7 @@ export const projects = [
     diagram: 'review',
     repository: { visibility: 'private' },
   },
-  {
+  'kube-lab': {
     slug: 'kube-lab',
     title: 'kube-lab',
     category: 'Cloud operations',
@@ -74,7 +86,7 @@ export const projects = [
     diagram: 'cloud',
     repository: { visibility: 'private' },
   },
-  {
+  'lucjoosten-nl': {
     slug: 'lucjoosten-nl',
     title: 'lucjoosten.nl',
     category: 'Web engineering',
@@ -86,7 +98,6 @@ export const projects = [
     diagram: 'release',
     repository: { visibility: 'public', url: 'https://github.com/lhajoosten/lucjoosten.nl' },
   },
-] as const satisfies readonly HomepageProject[];
+} as const satisfies Record<string, Project>;
 
-// The homepage retains its existing selection and order.
-export const homepageProjects = [projects[0], projects[1], projects[2], projects[3]] as const;
+export const projects = Object.values(projectCatalog);

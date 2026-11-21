@@ -91,7 +91,8 @@ test('project dialog traps and restores focus and respects repository visibility
   await expect(project).toBeFocused();
   await page.getByRole('button', { name: 'Read about ReviewBot' }).click();
   await expect(dialog.getByText('Private · source unavailable')).toBeVisible();
-  await expect(dialog.getByRole('link')).toHaveCount(0);
+  await expect(dialog.getByRole('link')).toHaveCount(1);
+  await expect(dialog.getByRole('link', { name: 'Read the case study' })).toBeVisible();
   await close.click();
   await expect(dialog).not.toBeVisible();
 });
@@ -125,7 +126,8 @@ test('Upkeep overview distinguishes current discovery from planned integration',
   ).toBeVisible();
   await expect(dialog.getByText(/Azure DevOps integration is planned/)).toBeVisible();
   await expect(dialog.getByText('Private · source unavailable')).toBeVisible();
-  await expect(dialog.getByRole('link')).toHaveCount(0);
+  await expect(dialog.getByRole('link')).toHaveCount(1);
+  await expect(dialog.getByRole('link', { name: 'Read the case study' })).toBeVisible();
   await page.keyboard.press('Escape');
   await expect(card).toBeFocused();
 });
