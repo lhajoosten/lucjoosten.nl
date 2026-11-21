@@ -35,3 +35,5 @@ The first API-based live run promoted successfully but timed out in confirmation
 The owner requested automatic production deployment after merge on 2026-11-21. Human review happens on the PR. After a successful main push Quality run, GitHub Actions can stage, verify and promote the exact current main commit automatically.
 
 Remove the required reviewer rule from the GitHub `production` environment after the workflow change reaches main. Keep the exact main branch restriction and the environment-scoped credentials. The workflow continues to verify the staged build before promotion and the public site afterward. The [operations guide](../operations/production-deployment.md#enable-automatic-deployments) records the settings change and recovery steps.
+
+Preflight rejects environment deployment gates before a job can wait for approval. Move the production concurrency group to the deploy job so eligible runs can pass preflight independently. Keep one active deploy job and one replaceable pending job so an active promotion can finish. Repeat the current-main check after the queue and immediately before promotion.

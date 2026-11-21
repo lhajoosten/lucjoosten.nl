@@ -18,6 +18,12 @@ export function validateRun(run, repository, sha, workflowSha) {
 }
 
 export function validateEnvironment(environment, policies) {
+  if (environment.protection_rules?.some((rule) => rule.type !== 'branch_policy')) {
+    throw new Error(
+      'The production environment contains a deployment gate. Clear Required reviewers, the wait timer and any custom deployment gates in GitHub Settings → Environments → production.',
+    );
+  }
+
   if (
     environment.deployment_branch_policy?.custom_branch_policies !== true ||
     environment.deployment_branch_policy?.protected_branches !== false ||

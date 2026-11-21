@@ -36,6 +36,13 @@ const check = (data, workflowSha = sha) =>
 test('successful current main with main-only policy can deploy automatically', async () => {
   await check(state());
 });
+for (const type of ['required_reviewers', 'wait_timer']) {
+  test(`rejects ${type} before entering the production environment`, async () => {
+    const data = state();
+    data['/environments/production'].protection_rules.push({ type });
+    await assert.rejects(check(data), /production environment contains a deployment gate/);
+  });
+}
 for (const [name, field, value] of [
   ['failed CI', 'conclusion', 'failure'],
   ['PR checks', 'event', 'pull_request'],
