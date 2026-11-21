@@ -136,7 +136,7 @@ jobs:
       vars.RELEASE_APP_ID != '' &&
       vars.RELEASE_BOT_USER_ID != '' &&
       vars.RELEASE_LOG_WRITE_ENABLED != 'false'
-    uses: lhajoosten/release-log/.github/workflows/rolling-release.yml@3929887fbbb8309a55ad819a3d4f0063928a5340
+    uses: lhajoosten/rolling-release/.github/workflows/rolling-release.yml@3929887fbbb8309a55ad819a3d4f0063928a5340
     with:
       tool-sha: '3929887fbbb8309a55ad819a3d4f0063928a5340'
       verification-runtimes: >-
