@@ -20,7 +20,7 @@ jobs:
     runs-on: ubuntu-24.04
     timeout-minutes: 20
     env:
-      RELEASE_LOG_IMAGE: ghcr.io/lhajoosten/release-log:v0.5.1@sha256:39fd52c45348d8c103bad37dedc558df8d3fa65eb87cbdc16b9b844a385531a2
+      RELEASE_LOG_IMAGE: ghcr.io/lhajoosten/release-log:latest
       RELEASE_LOG_CONFIGURATION: >-
         {
           "schemaVersion": 2,

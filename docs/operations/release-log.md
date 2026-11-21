@@ -1,10 +1,11 @@
 # Changelog automation
 
-The `Release Log` workflow pulls the published Linux/amd64 v0.5.0 CLI container
-by digest and runs `roll --write`. Docker verifies the pinned digest on each
-pull. A pull failure stops the job before it mints the App token. See the upstream
-[container instructions](https://github.com/lhajoosten/release-log/blob/v0.5.0/docs/container.md#run-with-mounted-inputs)
-and [release policy](https://github.com/lhajoosten/release-log/blob/v0.5.0/docs/release-policy.md).
+The `Release Log` workflow pulls `ghcr.io/lhajoosten/release-log:latest` for
+Linux/amd64 on each run and then runs `roll --write`. The tag follows the newest
+successfully published stable image. A pull failure stops the job before it mints
+the App token. See the upstream
+[container instructions](https://github.com/lhajoosten/release-log/blob/main/docs/container-release.md#latest-image-alias)
+and [release policy](https://github.com/lhajoosten/release-log/blob/main/docs/release-policy.md).
 
 When `RELEASE_LOG_ENABLED` is `true`, an ordinary PR merge into `main` runs
 capture and deterministic changelog generation. The bot maintains one release
@@ -34,7 +35,7 @@ Configure these repository Actions settings:
 Configuration is trusted input embedded in the reviewed
 [workflow](../../.github/workflows/release-log.yml), not a file loaded from
 a PR head or a mutable configuration variable. Changes alter captured identities
-and need PR review, just like image updates. Full main history and tags are checked
+and need PR review. Full main history and tags are checked
 out without persisted credentials and mounted read-only alongside trusted config,
 bot identity and event files. The container uses the host UID/GID, a read-only root
 filesystem, dropped capabilities and temporary scratch space. Network access is
@@ -72,8 +73,8 @@ exact landing is reusable. Conflicting tags, edited generated proposals and
 deliberately closed proposals require human inspection before recovery.
 
 Set `RELEASE_LOG_ENABLED` to `false` to stop future runs and inspect any run
-already in progress separately. Upgrade the image tag and digest together in a
-reviewed workflow change. Check that the new CLI can replay a pending proposal
-or prior release before upgrading. For recovery, select a compatible image in a
-reviewed workflow change and preserve capture identities, bootstrap/onboarding
+already in progress separately. Each run pulls the current stable image, so
+rerunning an event can use a newer CLI. If an update fails to replay an existing
+proposal or release, pin a compatible stable version and digest together in a
+reviewed workflow change. Preserve capture identities, bootstrap/onboarding
 boundaries and existing tags.
