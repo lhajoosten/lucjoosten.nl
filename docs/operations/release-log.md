@@ -12,6 +12,9 @@ PR containing `CHANGELOG.md`, the proposed package version and captured inputs.
 A human reviews and merges it, and the bot then tags that exact landing. Merged
 release PRs follow the main/Quality production approval path.
 
+The formatter skips the generated `CHANGELOG.md` and `.release-log/inputs.json`
+to preserve the exact bytes recorded in the proposal.
+
 ## Repository setup
 
 Install the Release Log GitHub App for `lhajoosten/lucjoosten.nl`, with Contents
