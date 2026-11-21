@@ -1,5 +1,7 @@
 # Production deployment workflow
 
+This spec records the original cutover. The [automatic deployment decision](../adr/0002-gated-production-workflow.md#automatic-deployments) updates its manual approval requirement.
+
 Status: owner approved the proposed flow and requested a separate PR on 2026-11-15. This authorizes implementation and review, not live configuration changes or a deployment. The owner explicitly requested both this and the About PR in the current session, with isolated branches. Base refreshed after the owner merged About PR #4: `c842370e56a33388f955c732056a33b4c35a6120`.
 
 ## Problem and scope

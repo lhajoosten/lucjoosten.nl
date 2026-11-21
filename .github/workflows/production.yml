@@ -10,7 +10,7 @@ permissions:
   actions: read
 
 # Never cancel a deployment midway through a production change. Recheck main
-# after approval and immediately before promotion to reject superseded runs.
+# before staging and immediately before promotion to reject superseded runs.
 concurrency:
   group: production
   cancel-in-progress: false
@@ -66,7 +66,7 @@ jobs:
         with:
           node-version-file: .node-version
           cache: pnpm
-      - name: Recheck main and protections after approval
+      - name: Recheck main and production branch policy
         run: node scripts/deployment/guard.mjs
         env:
           GH_TOKEN: ${{ github.token }}

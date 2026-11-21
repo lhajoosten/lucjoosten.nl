@@ -29,3 +29,9 @@ Keep the approved Quality, reviewer, staged-build and smoke-check sequence. Use 
 Before mutation, validate the fixed project/team and staged URL, READY production target and tested Git commit. Submit promotion once; an uncertain response requires inspection before any retry. Credentials remain protected environment variables, API requests refuse redirects and public smoke checks still follow confirmed promotion. This changes no reviewer protections, deploy targets or release triggers. The recovery PR’s local fixtures do not establish live promotion success; review and a separately approved workflow run remain required.
 
 The first API-based live run promoted successfully but timed out in confirmation. Read-only inspection verified the production domain and completed aliases for the exact tested deployment. Use the domain mapping as serving-state evidence instead of requiring project job-status fields; retain failure detection when an explicit failed job belongs to the same deployment. The workflow still performs public content/metadata/HTTP checks afterward. This confirmation correction requires no repeat promotion of the already live deployment.
+
+## Automatic deployments
+
+The owner requested automatic production deployment after merge on 2026-11-21. Human review happens on the PR. After a successful main push Quality run, GitHub Actions can stage, verify and promote the exact current main commit automatically.
+
+Remove the required reviewer rule from the GitHub `production` environment after the workflow change reaches main. Keep the exact main branch restriction and the environment-scoped credentials. The workflow continues to verify the staged build before promotion and the public site afterward. The [operations guide](../operations/production-deployment.md#enable-automatic-deployments) records the settings change and recovery steps.
