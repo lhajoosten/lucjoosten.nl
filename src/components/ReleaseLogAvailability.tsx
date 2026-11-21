@@ -37,7 +37,9 @@ export function ReleaseLogAvailability() {
             Container availability is listed in the upstream instructions.
           </>
         ) : (
-          <a href="https://github.com/lhajoosten/rolling-release/tags">Browse version tags on GitHub</a>
+          <a href="https://github.com/lhajoosten/rolling-release/tags">
+            Browse version tags on GitHub
+          </a>
         )}
       </p>
     </section>
