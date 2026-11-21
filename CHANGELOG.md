@@ -1,5 +1,32 @@
 # Changelog
 
+<!-- release-log:pending:v1 sha256:f5397c450b1e3e74f6b6f84813d2b6dd413d049fff2e8f3ddaa17add72608a58 -->
+
+## v0.2.0 (2026-11-21)
+
+### ✨ Features
+
+- Expand the project portfolio with six projects and two new case studies&#46; ([#20](https://github.com/lhajoosten/lucjoosten.nl/pull/20)) by [&#64;lhajoosten](https://github.com/lhajoosten)
+
+### 🛠️ Required actions
+
+- Clear Required reviewers on the production environment after merging the workflow change&#46; ([#16](https://github.com/lhajoosten/lucjoosten.nl/pull/16))
+
+<details>
+<summary>🔧 Internal maintenance</summary>
+
+- Allow the Production workflow to run without a required environment reviewer&#46; ([#16](https://github.com/lhajoosten/lucjoosten.nl/pull/16)) by [&#64;lhajoosten](https://github.com/lhajoosten)
+- Adopt the reviewed v0&#46;1&#46;0 release and verify proposal heads before merge&#46; ([#17](https://github.com/lhajoosten/lucjoosten.nl/pull/17)) by [&#64;lhajoosten](https://github.com/lhajoosten)
+- Update the digest&#45;pinned Release Log image to v0&#46;5&#46;1&#46; ([#18](https://github.com/lhajoosten/lucjoosten.nl/pull/18)) by [&#64;lhajoosten](https://github.com/lhajoosten)
+
+</details>
+
+<br>
+
+Full changelog: [v0&#46;1&#46;0&#8230;418e32f75c768f92292f5aaa071b267fc0634b3d](https://github.com/lhajoosten/lucjoosten.nl/compare/v0.1.0...418e32f75c768f92292f5aaa071b267fc0634b3d) (captured source).
+
+<!-- release-log:pending:end -->
+
 ## v0.1.0 (2026-11-20)
 
 Initial release of the captured repository state.
