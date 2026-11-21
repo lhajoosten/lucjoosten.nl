@@ -4,7 +4,7 @@ on:
   pull_request:
     branches: [main]
   push:
-    branches: [main]
+    branches: [main, ci/source-complexity-pilot]
   workflow_dispatch:
 
 permissions:
@@ -12,25 +12,4 @@ permissions:
 
 jobs:
   complexity:
-    runs-on: ubuntu-24.04
-    timeout-minutes: 15
-    steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-        with:
-          fetch-depth: 0
-          persist-credentials: false
-      - name: Check whether the base has a policy
-        id: policy
-        if: github.event_name == 'pull_request'
-        env:
-          BASE_SHA: ${{ github.event.pull_request.base.sha }}
-        run: |
-          git cat-file -e "$BASE_SHA^{commit}"
-          if git cat-file -e "$BASE_SHA:.lint-action.json" 2>/dev/null; then
-            echo 'available=true' >> "$GITHUB_OUTPUT"
-          else
-            echo 'Source complexity starts on pull requests once the policy reaches main.' >> "$GITHUB_STEP_SUMMARY"
-          fi
-      - name: Report source complexity
-        if: github.event_name != 'pull_request' || steps.policy.outputs.available == 'true'
-        uses: lhajoosten/lint-gate@cf1ece6767fbb5d86f21f3f979e44af6bebe3b71
+    uses: lhajoosten/lint-gate/.github/workflows/source-complexity.yml@8ce843c759982e6c376b336f1fef136b3d19b301
