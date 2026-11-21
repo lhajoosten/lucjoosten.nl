@@ -22,7 +22,7 @@ jobs:
       - name: Check out the pinned Release Log validator
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
-          repository: lhajoosten/release-log
+          repository: lhajoosten/rolling-release
           ref: 8d3c1b1eb575d773d9c9446804fcde4df1e73f7a # v0.5.1
           persist-credentials: false
 

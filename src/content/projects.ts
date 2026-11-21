@@ -23,7 +23,7 @@ export const projectCatalog = {
     status: 'Available · actively developed',
     tags: ['TypeScript', 'GitHub', 'Developer tooling'],
     diagram: 'release',
-    repository: { visibility: 'public', url: 'https://github.com/lhajoosten/release-log' },
+    repository: { visibility: 'public', url: 'https://github.com/lhajoosten/rolling-release' },
   },
   'lint-action': {
     slug: 'lint-action',
