@@ -1,11 +1,11 @@
 import { Link } from 'react-router';
 import { useRef, useState } from 'react';
-import { homepageProjects as projects } from '../content/projects';
-import type { HomepageProject } from '../content/projects';
+import { projectCatalog, projects } from '../content/projects';
+import type { Project } from '../content/projects';
 import { ProjectDiagram } from './ProjectDiagram';
 
 export function Projects() {
-  const [selected, setSelected] = useState<HomepageProject>(projects[0]);
+  const [selected, setSelected] = useState<Project>(projectCatalog['release-log']);
   const dialog = useRef<HTMLDialogElement>(null);
   return (
     <>
@@ -88,11 +88,9 @@ export function Projects() {
               : 'Private · source unavailable'}
           </dd>
         </dl>
-        {selected.slug === 'release-log' && (
-          <Link className="btn secondary" to="/projects/release-log">
-            Read the case study <span aria-hidden="true">→</span>
-          </Link>
-        )}
+        <Link className="btn secondary" to={`/projects/${selected.slug}`}>
+          Read the case study <span aria-hidden="true">→</span>
+        </Link>
         {selected.repository.visibility === 'public' && (
           <a className="btn blue" href={selected.repository.url} target="_blank" rel="noreferrer">
             Read the project README <span aria-hidden="true">↗</span>

@@ -1,4 +1,3 @@
-import { projectCaseStudies } from '../content/project-case-studies';
 import { Link } from 'react-router';
 import { projects } from '../content/projects';
 import { ProjectDiagram } from '../components/ProjectDiagram';
@@ -47,12 +46,9 @@ export function ProjectsPage() {
             </div>
             <p className="project-status mono">{project.status}</p>
             <p className="project-summary">{project.detail}</p>
-            {(project.slug === 'release-log' ||
-              projectCaseStudies.some((study) => study.project.slug === project.slug)) && (
-              <Link className="small-link" to={`/projects/${project.slug}`}>
-                Read the {project.title} case study <span aria-hidden="true">→</span>
-              </Link>
-            )}
+            <Link className="small-link" to={`/projects/${project.slug}`}>
+              Read the {project.title} case study <span aria-hidden="true">→</span>
+            </Link>
             {project.repository.visibility === 'public' && (
               <a
                 className="small-link"

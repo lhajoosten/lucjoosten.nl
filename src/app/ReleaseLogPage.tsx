@@ -1,10 +1,10 @@
 import { releaseLog } from '../content/release-log';
-import { projects } from '../content/projects';
+import { projectCatalog } from '../content/projects';
 import { CaseStudyLayout } from './CaseStudyLayout';
 import { ReleaseLogAvailability } from '../components/ReleaseLogAvailability';
 
 export function ReleaseLogPage() {
-  const project = projects[0];
+  const project = projectCatalog['release-log'];
   return (
     <CaseStudyLayout
       project={project}

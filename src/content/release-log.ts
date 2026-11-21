@@ -23,6 +23,7 @@ export const releaseLog = {
       paragraphs: [
         'The documented approach starts with Git reachability between tags, then associates commits with merged GitHub pull requests. It validates metadata and captures normalized release data before rendering.',
         'Snapshots avoid relying on PR descriptions that can change later. Stable grouping and ordering are intended to produce the same changelog from the same captured data and configuration. Missing associations and invalid metadata must be reported.',
+        'For example, once a release proposal has captured the input data, a later edit to a pull request description cannot change a changelog replayed from that snapshot. Reviewers can trace the release text back to the same captured changes.',
       ],
     },
     {

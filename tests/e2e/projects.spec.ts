@@ -15,7 +15,31 @@ test.beforeEach(async ({ page }) => {
   );
 });
 
-const newCaseStudies = [
+const caseStudies = [
+  {
+    path: '/projects/lint-action',
+    title: 'Lint Action — Luc Joosten',
+    heading: 'Lint Action',
+    section: 'Adopt the gate in stages',
+  },
+  {
+    path: '/projects/azure-ai-workbench',
+    title: 'Azure AI Workbench — Luc Joosten',
+    heading: 'Azure AI Workbench',
+    section: 'From exercises to a backend',
+  },
+  {
+    path: '/projects/reviewbot',
+    title: 'ReviewBot — Luc Joosten',
+    heading: 'ReviewBot',
+    section: 'The terminal and the dashboard',
+  },
+  {
+    path: '/projects/kube-lab',
+    title: 'kube-lab — Luc Joosten',
+    heading: 'kube-lab',
+    section: 'A dashboard and a bot in the same exercise',
+  },
   {
     path: '/projects/upkeep',
     title: 'Upkeep — Luc Joosten',
@@ -31,7 +55,7 @@ const newCaseStudies = [
 ];
 
 const routes = [
-  ...newCaseStudies,
+  ...caseStudies,
   { path: '/projects', title: 'Projects — Luc Joosten', heading: 'Engineering in practice.' },
   { path: '/projects/release-log', title: 'Release Log — Luc Joosten', heading: 'Release Log.' },
 ];
@@ -99,8 +123,9 @@ for (const route of routes) {
       `https://lucjoosten.nl${route.path}`,
     );
     if (route.path === '/projects') {
-      await expect(page.getByRole('article')).toHaveCount(6);
+      await expect(page.getByRole('article')).toHaveCount(7);
       for (const [name, url] of [
+        ['Lint Action', 'https://github.com/lhajoosten/lint-action'],
         ['Release Log', 'https://github.com/lhajoosten/release-log'],
         ['Azure AI Workbench', 'https://github.com/lhajoosten/azure-ai-workbench'],
         ['lucjoosten.nl', 'https://github.com/lhajoosten/lucjoosten.nl'],
@@ -132,9 +157,9 @@ for (const route of routes) {
       await expect(page.getByText('Planning · documentation only')).toBeVisible();
       await expect(page.getByText('Private · source unavailable')).toHaveCount(3);
       await expect(page.getByRole('article', { name: 'kube-lab' }).getByRole('link')).toHaveCount(
-        0,
+        1,
       );
-      for (const study of newCaseStudies) {
+      for (const study of caseStudies) {
         await page.getByRole('link', { name: `Read the ${study.heading} case study` }).click();
         await expect(page).toHaveTitle(study.title);
         await expect(page.getByRole('heading', { name: study.section })).toBeVisible();
@@ -230,15 +255,28 @@ test('keeps usage links working when GitHub is rate limited', async ({ page }) =
   await expect(page.getByRole('heading', { name: 'Packaged for use' })).toBeVisible();
 });
 
-test('homepage dialog and index links reach the new routes', async ({ page }) => {
+test('homepage and index share project cards and the homepage links to the Lint Action study', async ({
+  page,
+}) => {
   await page.goto('/');
-  await page.getByRole('button', { name: 'Read about Release Log' }).click();
+  const homepageCards = page.locator('#projects .project');
+  const homepageTitles = await homepageCards.locator('.project-title').allTextContents();
+  const homepageStatuses = await homepageCards.locator('.project-status').allTextContents();
+  await expect(homepageCards).toHaveCount(7);
+  await page.getByRole('button', { name: 'Read about Lint Action' }).click();
   await page.getByRole('dialog').getByRole('link', { name: 'Read the case study' }).click();
-  await expect(page.getByRole('heading', { level: 1 })).toHaveText('Release Log.');
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText('Lint Action');
   await expect(page.getByRole('dialog')).toHaveCount(0);
+  await expect(page.getByRole('link', { name: 'Read the reviewed README' })).toHaveAttribute(
+    'href',
+    /github\.com\/lhajoosten\/lint-action\/blob\/[a-f0-9]{40}\/README\.md$/,
+  );
   await page.getByRole('link', { name: 'Luc Joosten homepage' }).click();
   await page.getByRole('link', { name: 'View all projects' }).click();
   await expect(page).toHaveURL(/\/projects$/);
+  const indexCards = page.getByRole('article');
+  expect(await indexCards.locator('.project-title').allTextContents()).toEqual(homepageTitles);
+  expect(await indexCards.locator('.project-status').allTextContents()).toEqual(homepageStatuses);
 });
 
 test('unknown project routes have no valid canonical or social URL and recover home metadata', async ({

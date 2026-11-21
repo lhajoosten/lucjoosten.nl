@@ -1,6 +1,6 @@
-import type { HomepageProject } from '../content/projects';
+import type { Project } from '../content/projects';
 
-export function ProjectDiagram({ type }: { type: HomepageProject['diagram'] }) {
+export function ProjectDiagram({ type }: { type: Project['diagram'] }) {
   return (
     <svg viewBox="0 0 300 150" aria-hidden="true" focusable="false">
       {type === 'release' ? (

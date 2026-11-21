@@ -1,7 +1,7 @@
 import type { ReactNode } from 'react';
 import { Link } from 'react-router';
 import { ProjectDiagram } from '../components/ProjectDiagram';
-import type { HomepageProject } from '../content/projects';
+import type { Project } from '../content/projects';
 
 type SectionLink = { id: string; title: string };
 
@@ -13,7 +13,7 @@ export function CaseStudyLayout({
   firstSection,
   children,
 }: {
-  project: HomepageProject;
+  project: Project;
   heading: ReactNode;
   introduction: ReactNode;
   sections: readonly SectionLink[];

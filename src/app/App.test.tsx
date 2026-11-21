@@ -20,7 +20,9 @@ test('renders the supplied professional positioning and real homepage destinatio
     'href',
     '#projects',
   );
-  expect(screen.queryByRole('link', { name: /ReviewBot/ })).not.toBeInTheDocument();
+  expect(
+    screen.queryByRole('link', { name: 'View the ReviewBot repository' }),
+  ).not.toBeInTheDocument();
 });
 
 test('unknown routes offer an accessible route home', () => {
@@ -34,13 +36,13 @@ test('unknown routes offer an accessible route home', () => {
   expect(document.title).toBe('Page not found — Luc Joosten');
 });
 
-test('projects retain reviewed status and expose only the available case study', () => {
+test('projects retain reviewed status and expose case studies and public repositories', () => {
   render(
     <MemoryRouter initialEntries={['/projects']}>
       <App />
     </MemoryRouter>,
   );
-  expect(screen.getAllByRole('article')).toHaveLength(6);
+  expect(screen.getAllByRole('article')).toHaveLength(7);
   expect(screen.getByRole('heading', { name: 'Upkeep' })).toBeInTheDocument();
   expect(screen.getByText('Private · local discovery available')).toBeInTheDocument();
   expect(
@@ -58,7 +60,9 @@ test('projects retain reviewed status and expose only the available case study',
   expect(
     screen.getByRole('link', { name: 'View the Azure AI Workbench repository' }),
   ).toHaveAttribute('href', 'https://github.com/lhajoosten/azure-ai-workbench');
-  expect(screen.queryByRole('link', { name: /ReviewBot/ })).not.toBeInTheDocument();
+  expect(
+    screen.queryByRole('link', { name: 'View the ReviewBot repository' }),
+  ).not.toBeInTheDocument();
 });
 
 test('route changes update metadata, clear not-found directives and focus the destination', async () => {
