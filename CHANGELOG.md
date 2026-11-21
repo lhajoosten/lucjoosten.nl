@@ -1,6 +1,25 @@
 # Changelog
 
-<!-- release-log:pending:v1 sha256:86b661c12153c24586027f6b9d44cb689e5830fd5220806feac1b600df7fe45e -->
+<!-- release-log:pending:v1 sha256:234c2a232eb296da45ffc6e04971503e543588d6b2f97ae3e68fabb347490462 -->
+
+## v0.3.0 (2026-11-21)
+
+### ✨ Features
+
+- Add Lint Action and expand portfolio project case studies&#46; ([#24](https://github.com/lhajoosten/lucjoosten.nl/pull/24)) by [&#64;lhajoosten](https://github.com/lhajoosten)
+
+<details>
+<summary>🔧 Internal maintenance</summary>
+
+- Preserve the generated changelog during formatting checks&#46; ([#26](https://github.com/lhajoosten/lucjoosten.nl/pull/26)) by [&#64;lhajoosten](https://github.com/lhajoosten)
+
+</details>
+
+<br>
+
+Full changelog: [v0&#46;2&#46;0&#8230;fe0887f494ac78df728039f1a8d73cee44c6eefd](https://github.com/lhajoosten/lucjoosten.nl/compare/v0.2.0...fe0887f494ac78df728039f1a8d73cee44c6eefd) (captured source).
+
+<!-- release-log:pending:end -->
 
 ## v0.2.0 (2026-11-21)
 
@@ -28,7 +47,6 @@
 
 Full changelog: [v0&#46;1&#46;0&#8230;f18269b3b0a5b95baf6aaf9380563f638d7f5ec9](https://github.com/lhajoosten/lucjoosten.nl/compare/v0.1.0...f18269b3b0a5b95baf6aaf9380563f638d7f5ec9) (captured source).
 
-<!-- release-log:pending:end -->
 
 ## v0.1.0 (2026-11-20)
 
