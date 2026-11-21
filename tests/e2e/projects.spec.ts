@@ -126,7 +126,7 @@ for (const route of routes) {
       await expect(page.getByRole('article')).toHaveCount(7);
       for (const [name, url] of [
         ['Lint Action', 'https://github.com/lhajoosten/lint-action'],
-        ['Release Log', 'https://github.com/lhajoosten/release-log'],
+        ['Release Log', 'https://github.com/lhajoosten/rolling-release'],
         ['Azure AI Workbench', 'https://github.com/lhajoosten/azure-ai-workbench'],
         ['lucjoosten.nl', 'https://github.com/lhajoosten/lucjoosten.nl'],
       ] as const) {
@@ -237,7 +237,7 @@ test('resolves the latest stable tag without changing the reviewed narrative', a
   await page.goto('/projects/release-log');
   await expect(page.getByRole('link', { name: 'v0.3.0', exact: true })).toHaveAttribute(
     'href',
-    'https://github.com/lhajoosten/release-log/tree/v0.3.0',
+    'https://github.com/lhajoosten/rolling-release/tree/v0.3.0',
   );
   await expect(page.getByText('Latest stable tag:', { exact: false })).toBeVisible();
   await expect(page.getByRole('link', { name: 'Read the reviewed README' })).toHaveAttribute(

@@ -1,5 +1,5 @@
 export const releaseLogRefsUrl =
-  'https://api.github.com/repos/lhajoosten/release-log/git/matching-refs/tags/v';
+  'https://api.github.com/repos/lhajoosten/rolling-release/git/matching-refs/tags/v';
 
 // GitHub returns matching refs, not a list ordered by semantic version.
 export function latestStableTag(data: unknown): string | null {

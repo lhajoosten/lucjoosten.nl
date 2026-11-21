@@ -4,7 +4,7 @@ export const releaseLog = {
   introduction:
     'A GitHub-first TypeScript CLI for deterministic changelogs and release automation, packaged as a runnable container and used by the project itself.',
   source: {
-    url: 'https://github.com/lhajoosten/release-log/blob/033903ca288b623d0014e5e0e23de354b5668ea8/README.md',
+    url: 'https://github.com/lhajoosten/rolling-release/blob/033903ca288b623d0014e5e0e23de354b5668ea8/README.md',
     revision: '033903ca288b623d0014e5e0e23de354b5668ea8',
     reviewed: '2026-11-16',
   },

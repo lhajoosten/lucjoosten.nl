@@ -30,7 +30,7 @@ Configure these repository Actions settings:
 | Variable | `RELEASE_LOG_WRITE_ENABLED` | Set to `false` to keep previews and disable writes                           |
 
 Configuration is trusted input embedded in the reviewed
-[workflow](../../.github/workflows/release-log.yml), not a file loaded from
+[workflow](../../.github/workflows/rolling-release.yml), not a file loaded from
 a PR head or a mutable configuration variable. Changes alter captured identities
 and need PR review. Full main history and tags are checked
 out without persisted credentials and mounted read-only alongside trusted config,

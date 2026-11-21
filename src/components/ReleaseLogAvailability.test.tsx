@@ -11,11 +11,11 @@ test('keeps usage instructions available and resolves a new tag on a later visit
   const firstVisit = render(<ReleaseLogAvailability />);
   expect(screen.getByRole('link', { name: 'Run the published CLI' })).toHaveAttribute(
     'href',
-    'https://github.com/lhajoosten/release-log/blob/main/README.md#run-the-published-cli',
+    'https://github.com/lhajoosten/rolling-release/blob/main/README.md#run-the-published-cli',
   );
   expect(await screen.findByRole('link', { name: 'v0.2.1' })).toHaveAttribute(
     'href',
-    'https://github.com/lhajoosten/release-log/tree/v0.2.1',
+    'https://github.com/lhajoosten/rolling-release/tree/v0.2.1',
   );
   firstVisit.unmount();
   render(<ReleaseLogAvailability />);
