@@ -1,6 +1,26 @@
 # Changelog
 
-<!-- release-log:pending:v1 sha256:234c2a232eb296da45ffc6e04971503e543588d6b2f97ae3e68fabb347490462 -->
+<!-- release-log:pending:v1 sha256:80edc8c3e23557d812ef8076b4e2308d40c8dc7b1f6c1cd4f35c56755afa5280 -->
+
+## v0.3.1 (2026-11-22)
+
+### 🐛 Fixes
+
+- Update the portfolio to use Rolling Release and Lint Gate&#46; ([#30](https://github.com/lhajoosten/lucjoosten.nl/pull/30)) by [&#64;lhajoosten](https://github.com/lhajoosten)
+
+<details>
+<summary>🔧 Internal maintenance</summary>
+
+- Separate read&#45;only Release Log previews from release writes&#46; ([#27](https://github.com/lhajoosten/lucjoosten.nl/pull/27)) by [&#64;lhajoosten](https://github.com/lhajoosten)
+- Prepare lucjoosten&#46;nl release workflows for the Release Log provider rename&#46; ([#28](https://github.com/lhajoosten/lucjoosten.nl/pull/28)) by [&#64;lhajoosten](https://github.com/lhajoosten)
+
+</details>
+
+<br>
+
+Full changelog: [v0&#46;3&#46;0&#8230;510fbfe0eec16f771cb08b36cd31b4c374921e43](https://github.com/lhajoosten/lucjoosten.nl/compare/v0.3.0...510fbfe0eec16f771cb08b36cd31b4c374921e43) (captured source).
+
+<!-- release-log:pending:end -->
 
 ## v0.3.0 (2026-11-21)
 
@@ -19,7 +39,6 @@
 
 Full changelog: [v0&#46;2&#46;0&#8230;fe0887f494ac78df728039f1a8d73cee44c6eefd](https://github.com/lhajoosten/lucjoosten.nl/compare/v0.2.0...fe0887f494ac78df728039f1a8d73cee44c6eefd) (captured source).
 
-<!-- release-log:pending:end -->
 
 ## v0.2.0 (2026-11-21)
 
