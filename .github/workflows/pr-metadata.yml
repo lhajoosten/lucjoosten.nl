@@ -23,7 +23,7 @@ jobs:
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           repository: lhajoosten/rolling-release
-          ref: 8d3c1b1eb575d773d9c9446804fcde4df1e73f7a # v0.5.1
+          ref: b73b56364a92d546829a11865b9a7ed658daaabe # v0.8.0
           persist-credentials: false
 
       - name: Set up Node.js

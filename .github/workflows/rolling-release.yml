@@ -16,7 +16,7 @@ concurrency:
 
 jobs:
   release:
-    uses: lhajoosten/rolling-release/.github/workflows/consumer-release.yml@f161eeb22e7f049d6420d358b8688cbdbccf893b
+    uses: lhajoosten/rolling-release/.github/workflows/consumer-release.yml@f74198ff778b132dddc5a6440f230fd6b5be8ce8
     with:
       release-branch: main
       app-id: ${{ vars.RELEASE_APP_ID }}
@@ -25,7 +25,8 @@ jobs:
       replay-history: >-
         [
           {"sha":"3929887fbbb8309a55ad819a3d4f0063928a5340","legacy":false,"digest":"08279dd93f1e1917ae007d62f1bff6ea986298d59b93a3182f6c606d4ac4b11a"},
-          {"sha":"8d3c1b1eb575d773d9c9446804fcde4df1e73f7a","legacy":true,"digest":"39fd52c45348d8c103bad37dedc558df8d3fa65eb87cbdc16b9b844a385531a2"}
+          {"sha":"8d3c1b1eb575d773d9c9446804fcde4df1e73f7a","legacy":true,"digest":"39fd52c45348d8c103bad37dedc558df8d3fa65eb87cbdc16b9b844a385531a2"},
+          {"sha":"21662200936919c1df83f9d3ce8fccee42fa3dc4","legacy":false,"digest":"8da2381cb6192ac27729508e6743a402909d2baceda13ba72964c062ffd5311e"}
         ]
       configuration: >-
         {
@@ -33,19 +34,40 @@ jobs:
           "repository": "lhajoosten/lucjoosten.nl",
           "repositoryId": 1458711968,
           "releaseBranch": "main",
-          "releasePolicy": "release-policy-v1",
+          "releasePolicy": "release-policy-v2",
           "contextPolicy": "required",
-          "changelog": {"verbosity": "concise", "format": "compact"},
+          "changelog": {
+            "verbosity": "concise",
+            "format": "compact"
+          },
           "bootstrap": {
             "baselineSha": "ed051000556633e810eaee8d9d403516c299b823",
-            "onboardingSha": "93cce7c4b3b8ca65e9102af6316860d23e3dcc8a"
+            "onboardingSha": "912b760eeb0dfac8a6146ca73f877941c0158d9f"
           },
-          "adoptedRelease": {
-            "pullNumber": 12,
-            "headSha": "e00761aed3c185582b26b09c2c7ca97cb325e849",
-            "landingSha": "50028db1e409a3948e376505d2bf7c7f291bcf27",
-            "commitSha": "eb4e5115ebae8433b04fe0c74fc6e92f48a6b72f",
-            "tag": "v0.1.0"
+          "freshSeries": {
+            "id": "ground-zero",
+            "previousVersion": "0.3.0",
+            "previousChangelogSha256": "a207043a477ba6dbf695d5dbfc60313b8fefe3b2c876cbb91cf7ba6a1ff45fda",
+            "previousLandings": [
+              {
+                "pullNumber": 12,
+                "botUserId": 356902848,
+                "headSha": "e00761aed3c185582b26b09c2c7ca97cb325e849",
+                "landingSha": "50028db1e409a3948e376505d2bf7c7f291bcf27"
+              },
+              {
+                "pullNumber": 21,
+                "botUserId": 356902848,
+                "headSha": "abfc9fb78ca1c1bd0c78f5b78fc348f656bef8cc",
+                "landingSha": "0d7cc504a610e2f6ef35929204bd7a25e4c37965"
+              },
+              {
+                "pullNumber": 25,
+                "botUserId": 356902848,
+                "headSha": "5969e9036651641ba0c85dc5c5f3b769570079d9",
+                "landingSha": "8dc3532d0153f377b8e4a7b5bc9fc4ddcd3dbb8d"
+              }
+            ]
           }
         }
     secrets:
