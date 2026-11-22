@@ -13,14 +13,14 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          fetch-depth: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.ref == 'release-log/main' && 2 || 1 }}
+          fetch-depth: ${{ github.event_name == 'pull_request' && (github.event.pull_request.head.ref == 'release-log/main' || startsWith(github.event.pull_request.head.ref, 'release-log-series/')) && 2 || 1 }}
       - uses: pnpm/action-setup@v4
       - uses: actions/setup-node@v4
         with:
           node-version-file: .node-version
           cache: pnpm
       - name: Verify generated release proposal head
-        if: github.event_name == 'pull_request' && github.event.pull_request.head.ref == 'release-log/main'
+        if: github.event_name == 'pull_request' && (github.event.pull_request.head.ref == 'release-log/main' || startsWith(github.event.pull_request.head.ref, 'release-log-series/'))
         env:
           RELEASE_BOT_USER_ID: ${{ vars.RELEASE_BOT_USER_ID }}
         run: node scripts/release/check-proposal.mjs
