@@ -1,6 +1,29 @@
 # Changelog
 
-<!-- release-log:pending:v1 sha256:234c2a232eb296da45ffc6e04971503e543588d6b2f97ae3e68fabb347490462 -->
+<!-- release-log:pending:v1 sha256:0ed76fec7674bfed26961aa329190e4a99c24cf7b083ac6f92639bb943195552 -->
+
+## v0.3.1 (2026-11-22)
+
+### 🐛 Fixes
+
+- Update the portfolio to use Rolling Release and Lint Gate&#46; ([#30](https://github.com/lhajoosten/lucjoosten.nl/pull/30)) by [&#64;lhajoosten](https://github.com/lhajoosten)
+
+<details>
+<summary>🔧 Internal maintenance</summary>
+
+- Separate read&#45;only Release Log previews from release writes&#46; ([#27](https://github.com/lhajoosten/lucjoosten.nl/pull/27)) by [&#64;lhajoosten](https://github.com/lhajoosten)
+- Prepare lucjoosten&#46;nl release workflows for the Release Log provider rename&#46; ([#28](https://github.com/lhajoosten/lucjoosten.nl/pull/28)) by [&#64;lhajoosten](https://github.com/lhajoosten)
+- Add an advisory TypeScript complexity report&#46; ([#29](https://github.com/lhajoosten/lucjoosten.nl/pull/29)) by [&#64;lhajoosten](https://github.com/lhajoosten)
+- Pilot a simpler release workflow for the portfolio&#46; ([#31](https://github.com/lhajoosten/lucjoosten.nl/pull/31)) by [&#64;lhajoosten](https://github.com/lhajoosten)
+- Use the shared Rolling Release workflow&#46; ([#33](https://github.com/lhajoosten/lucjoosten.nl/pull/33)) by [&#64;lhajoosten](https://github.com/lhajoosten)
+
+</details>
+
+<br>
+
+Full changelog: [v0&#46;3&#46;0&#8230;912b760eeb0dfac8a6146ca73f877941c0158d9f](https://github.com/lhajoosten/lucjoosten.nl/compare/v0.3.0...912b760eeb0dfac8a6146ca73f877941c0158d9f) (captured source).
+
+<!-- release-log:pending:end -->
 
 ## v0.3.0 (2026-11-21)
 
@@ -19,7 +42,6 @@
 
 Full changelog: [v0&#46;2&#46;0&#8230;fe0887f494ac78df728039f1a8d73cee44c6eefd](https://github.com/lhajoosten/lucjoosten.nl/compare/v0.2.0...fe0887f494ac78df728039f1a8d73cee44c6eefd) (captured source).
 
-<!-- release-log:pending:end -->
 
 ## v0.2.0 (2026-11-21)
 
