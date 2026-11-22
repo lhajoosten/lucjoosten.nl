@@ -4,6 +4,7 @@ on:
   pull_request_target:
     types: [closed]
     branches: [main]
+  workflow_dispatch:
 
 permissions:
   contents: read
@@ -14,17 +15,14 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
-  preview:
-    name: Preview with Rolling Release latest
-    if: >-
-      github.event.pull_request.merged == true &&
-      vars.RELEASE_APP_ID != '' &&
-      vars.RELEASE_BOT_USER_ID != ''
-    runs-on: ubuntu-24.04
-    timeout-minutes: 20
-    env:
-      RELEASE_LOG_IMAGE: ghcr.io/lhajoosten/release-log:latest
-      RELEASE_LOG_CONFIGURATION: &release_config >-
+  release:
+    uses: lhajoosten/rolling-release/.github/workflows/consumer-release.yml@215ce3f9813f4159610442187656c614c5fd3b34
+    with:
+      release-branch: main
+      app-id: ${{ vars.RELEASE_APP_ID }}
+      bot-user-id: ${{ vars.RELEASE_BOT_USER_ID }}
+      write-enabled: ${{ vars.RELEASE_LOG_WRITE_ENABLED != 'false' }}
+      configuration: >-
         {
           "schemaVersion": 2,
           "repository": "lhajoosten/lucjoosten.nl",
@@ -45,106 +43,5 @@ jobs:
             "tag": "v0.1.0"
           }
         }
-    steps:
-      - name: Check out release history as data
-        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
-        with:
-          ref: main
-          path: source
-          fetch-depth: 0
-          persist-credentials: false
-
-      - name: Pull the published CLI
-        run: docker pull --platform linux/amd64 "$RELEASE_LOG_IMAGE"
-
-      - name: Prepare trusted release inputs
-        env:
-          RELEASE_BOT_USER_ID: ${{ vars.RELEASE_BOT_USER_ID }}
-        run: |
-          mkdir -p "$RUNNER_TEMP/release-log-inputs"
-          printf '%s\n' "$RELEASE_LOG_CONFIGURATION" > "$RUNNER_TEMP/release-log-inputs/config.json"
-          jq -n --argjson bot "$RELEASE_BOT_USER_ID" \
-            '{schemaVersion: 1, botUserId: $bot}' > "$RUNNER_TEMP/release-log-inputs/automation.json"
-          cp "$GITHUB_EVENT_PATH" "$RUNNER_TEMP/release-log-inputs/event.json"
-
-      - name: Make the reviewed replay packages available to the preview
-        env:
-          REPLAY_IMAGES: |-
-            [
-              {
-                "sha": "3929887fbbb8309a55ad819a3d4f0063928a5340",
-                "digest": "08279dd93f1e1917ae007d62f1bff6ea986298d59b93a3182f6c606d4ac4b11a",
-                "legacy": false
-              },
-              {
-                "sha": "8d3c1b1eb575d773d9c9446804fcde4df1e73f7a",
-                "digest": "39fd52c45348d8c103bad37dedc558df8d3fa65eb87cbdc16b9b844a385531a2",
-                "legacy": true
-              }
-            ]
-        run: |
-          active=$(docker image inspect --format '{{ index .Config.Labels "org.opencontainers.image.revision" }}' "$RELEASE_LOG_IMAGE")
-          [[ "$active" =~ ^[a-f0-9]{40}$ ]]
-          input_dir="$RUNNER_TEMP/release-log-inputs"
-          history=$(jq -c --arg active "$active" 'map(select(.sha != $active))' <<< "$REPLAY_IMAGES")
-          while IFS=$'\t' read -r sha digest; do
-            image="ghcr.io/lhajoosten/release-log@sha256:$digest"
-            docker pull --platform linux/amd64 "$image"
-            test "$(docker image inspect --format '{{ index .Config.Labels "org.opencontainers.image.revision" }}' "$image")" = "$sha"
-            container=$(docker create --platform linux/amd64 "$image")
-            trap 'docker rm "$container" >/dev/null' EXIT
-            mkdir -p "$input_dir/producers/$sha"
-            docker cp "$container:/opt/release-log/." "$input_dir/producers/$sha"
-            docker rm "$container" >/dev/null
-            trap - EXIT
-          done < <(jq -r '.[] | [.sha, .digest] | @tsv' <<< "$history")
-          jq -n --arg active "$active" --argjson history "$history" \
-            '{activeSha: $active, producers: [$history[] | {sha, legacy, directory: ("/inputs/producers/" + .sha)}]}' \
-            > "$input_dir/producers.json"
-
-      - name: Mint a read-only preview token
-        id: app
-        uses: actions/create-github-app-token@fee1f7d63c2ff003460e3d139729b119787bc349 # v2.2.2
-        with:
-          app-id: ${{ vars.RELEASE_APP_ID }}
-          private-key: ${{ secrets.RELEASE_APP_PRIVATE_KEY }}
-          permission-contents: read
-          permission-pull-requests: read
-
-      - name: Preview the release
-        env:
-          RELEASE_LOG_APP_TOKEN: ${{ steps.app.outputs.token }}
-        run: |
-          docker run --rm --platform linux/amd64 --read-only --cap-drop ALL \
-            --security-opt no-new-privileges --user "$(id -u):$(id -g)" \
-            --tmpfs /tmp:rw,nosuid,nodev,noexec,size=64m \
-            --mount "type=bind,src=$GITHUB_WORKSPACE/source,dst=/source,readonly" \
-            --mount "type=bind,src=$RUNNER_TEMP/release-log-inputs,dst=/inputs,readonly" \
-            -e RELEASE_LOG_APP_TOKEN -e GITHUB_EVENT_NAME \
-            "$RELEASE_LOG_IMAGE" roll \
-            --producer-runtimes /inputs/producers.json \
-            --config /inputs/config.json --automation /inputs/automation.json \
-            --repository /source --event /inputs/event.json --dry-run
-
-  write-release:
-    name: Verify and write the release
-    needs: preview
-    # The writer re-reads GitHub and never consumes preview outputs or artifacts.
-    if: >-
-      !cancelled() &&
-      github.event.pull_request.merged == true &&
-      vars.RELEASE_APP_ID != '' &&
-      vars.RELEASE_BOT_USER_ID != '' &&
-      vars.RELEASE_LOG_WRITE_ENABLED != 'false'
-    uses: lhajoosten/rolling-release/.github/workflows/rolling-release.yml@3929887fbbb8309a55ad819a3d4f0063928a5340
-    with:
-      tool-sha: '3929887fbbb8309a55ad819a3d4f0063928a5340'
-      verification-runtimes: >-
-        [{"sha":"8d3c1b1eb575d773d9c9446804fcde4df1e73f7a","legacy":true}]
-      release-branch: main
-      app-id: ${{ vars.RELEASE_APP_ID }}
-      bot-user-id: ${{ vars.RELEASE_BOT_USER_ID }}
-      write: true
-      configuration: *release_config
     secrets:
       app-private-key: ${{ secrets.RELEASE_APP_PRIVATE_KEY }}

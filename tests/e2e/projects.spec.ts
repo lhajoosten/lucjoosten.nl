@@ -18,8 +18,8 @@ test.beforeEach(async ({ page }) => {
 const caseStudies = [
   {
     path: '/projects/lint-action',
-    title: 'Lint Action — Luc Joosten',
-    heading: 'Lint Action',
+    title: 'Lint Gate — Luc Joosten',
+    heading: 'Lint Gate',
     section: 'Adopt the gate in stages',
   },
   {
@@ -57,7 +57,11 @@ const caseStudies = [
 const routes = [
   ...caseStudies,
   { path: '/projects', title: 'Projects — Luc Joosten', heading: 'Engineering in practice.' },
-  { path: '/projects/release-log', title: 'Release Log — Luc Joosten', heading: 'Release Log.' },
+  {
+    path: '/projects/release-log',
+    title: 'Rolling Release — Luc Joosten',
+    heading: 'Rolling Release.',
+  },
 ];
 
 for (const route of routes) {
@@ -125,8 +129,8 @@ for (const route of routes) {
     if (route.path === '/projects') {
       await expect(page.getByRole('article')).toHaveCount(7);
       for (const [name, url] of [
-        ['Lint Action', 'https://github.com/lhajoosten/lint-action'],
-        ['Release Log', 'https://github.com/lhajoosten/rolling-release'],
+        ['Lint Gate', 'https://github.com/lhajoosten/lint-gate'],
+        ['Rolling Release', 'https://github.com/lhajoosten/rolling-release'],
         ['Azure AI Workbench', 'https://github.com/lhajoosten/azure-ai-workbench'],
         ['lucjoosten.nl', 'https://github.com/lhajoosten/lucjoosten.nl'],
       ] as const) {
@@ -166,8 +170,8 @@ for (const route of routes) {
         await page.getByRole('link', { name: 'Back to projects' }).first().click();
         await expect(page).toHaveURL(/\/projects$/);
       }
-      await page.getByRole('link', { name: 'Read the Release Log case study' }).click();
-      await expect(page.getByRole('heading', { level: 1 })).toHaveText('Release Log.');
+      await page.getByRole('link', { name: 'Read the Rolling Release case study' }).click();
+      await expect(page.getByRole('heading', { level: 1 })).toHaveText('Rolling Release.');
     } else if (route.path === '/projects/release-log') {
       await expect(page.getByRole('link', { name: 'Read the reviewed README' })).toHaveAttribute(
         'href',
@@ -201,11 +205,11 @@ test('project navigation supports keyboard focus, history, metadata and homepage
       'aria-expanded',
       'false',
     );
-  const link = page.getByRole('link', { name: 'Read the Release Log case study' });
+  const link = page.getByRole('link', { name: 'Read the Rolling Release case study' });
   await link.focus();
   await page.keyboard.press('Enter');
   await expect(page.getByRole('heading', { level: 1 })).toBeFocused();
-  await expect(page).toHaveTitle('Release Log — Luc Joosten');
+  await expect(page).toHaveTitle('Rolling Release — Luc Joosten');
   await expect(page.locator('meta[property="og:url"]')).toHaveAttribute(
     'content',
     'https://lucjoosten.nl/projects/release-log',
@@ -213,7 +217,7 @@ test('project navigation supports keyboard focus, history, metadata and homepage
   await page.goBack();
   await expect(page).toHaveTitle('Projects — Luc Joosten');
   await page.goForward();
-  await expect(page).toHaveTitle('Release Log — Luc Joosten');
+  await expect(page).toHaveTitle('Rolling Release — Luc Joosten');
   await page
     .getByRole('navigation', { name: 'Case study sections' })
     .getByRole('link', { name: 'Where AI belongs' })
@@ -255,7 +259,7 @@ test('keeps usage links working when GitHub is rate limited', async ({ page }) =
   await expect(page.getByRole('heading', { name: 'Packaged for use' })).toBeVisible();
 });
 
-test('homepage and index share project cards and the homepage links to the Lint Action study', async ({
+test('homepage and index share project cards and the homepage links to the Lint Gate study', async ({
   page,
 }) => {
   await page.goto('/');
@@ -263,13 +267,13 @@ test('homepage and index share project cards and the homepage links to the Lint 
   const homepageTitles = await homepageCards.locator('.project-title').allTextContents();
   const homepageStatuses = await homepageCards.locator('.project-status').allTextContents();
   await expect(homepageCards).toHaveCount(7);
-  await page.getByRole('button', { name: 'Read about Lint Action' }).click();
+  await page.getByRole('button', { name: 'Read about Lint Gate' }).click();
   await page.getByRole('dialog').getByRole('link', { name: 'Read the case study' }).click();
-  await expect(page.getByRole('heading', { level: 1 })).toHaveText('Lint Action');
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText('Lint Gate');
   await expect(page.getByRole('dialog')).toHaveCount(0);
   await expect(page.getByRole('link', { name: 'Read the reviewed README' })).toHaveAttribute(
     'href',
-    /github\.com\/lhajoosten\/lint-action\/blob\/[a-f0-9]{40}\/README\.md$/,
+    /github\.com\/lhajoosten\/lint-gate\/blob\/[a-f0-9]{40}\/README\.md$/,
   );
   await page.getByRole('link', { name: 'Luc Joosten homepage' }).click();
   await page.getByRole('link', { name: 'View all projects' }).click();
