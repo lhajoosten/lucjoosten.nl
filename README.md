@@ -33,7 +33,7 @@ pnpm preview
 - `src/content/profile.ts`: approved positioning, current role, technical focus and profile links shared by home/About.
 - `src/content/projects.ts`: shared reviewed project summaries and visibility.
 - `src/content/release-log.ts`: curated case-study copy and pinned README provenance.
-- `src/content/release-log-version.ts`: optional public GitHub stable-tag resolution for the Release Log case study.
+- `src/content/release-log-version.ts`: optional public GitHub stable-tag resolution for the Rolling Release case study.
 - `src/app/metadata.ts`: explicit page list and metadata for prerendering and client navigation.
 - `src/styles`: light/dark design tokens and responsive layouts.
 - `docs/engineering/lucjoosten-portfolio-v2.html`: unchanged approved prototype, kept local and untracked.
@@ -45,9 +45,9 @@ pnpm preview
 
 Projects navigation opens `/projects`. The index and homepage share the same seven projects in the same order. Homepage cards open overview dialogs, and both surfaces link to each project’s case study. About navigation opens `/about`. Experience, Expertise, Writing and Contact retain homepage anchors. Unknown routes, including unknown project slugs, show a not-found view.
 
-Release Log and Azure AI Workbench retain their reviewed README-based summaries. The Upkeep case study uses the owner’s publication-approved description from 2026-11-16. ReviewBot and kube-lab use the project goals documented in issue #19. Lint Action cites the public README at the reviewed implementation revision. The portfolio case study uses the site README and the route and rendering behavior of this repository.
+Rolling Release and Azure AI Workbench retain their reviewed README-based summaries. The Upkeep case study uses the owner’s publication-approved description from 2026-11-16. ReviewBot and kube-lab use the project goals documented in issue #19. Lint Gate cites the public README at the reviewed implementation revision. The portfolio case study uses the site README and the route and rendering behavior of this repository.
 
-Release Log’s expanded case study covers its packaged CLI, human-reviewed release cycle, self-use, AI boundaries and remaining validation. The narrative is reviewed against a pinned README; it does not update automatically. On each case-study mount, an optional browser request to GitHub’s public matching-refs API selects the highest stable `vMAJOR.MINOR.PATCH` tag numerically. Prereleases and malformed tags are excluded. New tags appear on a later visit without a website commit or deployment. No credentials, referrer, persistent cache, scheduled job or build-time network access is used. GitHub still receives the visitor’s ordinary network request. Failure, rate limiting, a five-second timeout or disabled JavaScript leaves ordinary usage/tag links available. Tags identify source versions, not successful container publication; the usage link always points to the current upstream README for verified image/digest instructions. See [ADR 0003](docs/adr/0003-release-log-version-resolution.md).
+Rolling Release’s expanded case study covers its packaged CLI, human-reviewed release cycle, self-use, AI boundaries and remaining validation. The narrative is reviewed against a pinned README; it does not update automatically. On each case-study mount, an optional browser request to GitHub’s public matching-refs API selects the highest stable `vMAJOR.MINOR.PATCH` tag numerically. Prereleases and malformed tags are excluded. New tags appear on a later visit without a website commit or deployment. No credentials, referrer, persistent cache, scheduled job or build-time network access is used. GitHub still receives the visitor’s ordinary network request. Failure, rate limiting, a five-second timeout or disabled JavaScript leaves ordinary usage/tag links available. Tags identify source versions, not successful container publication; the usage link always points to the current upstream README for verified image/digest instructions. See [ADR 0003](docs/adr/0003-release-log-version-resolution.md).
 
 ## Build and hosting
 

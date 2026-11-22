@@ -28,9 +28,9 @@ export const pages: readonly PageMetadata[] = [
   },
   {
     path: '/projects/release-log',
-    title: 'Release Log — Luc Joosten',
+    title: 'Rolling Release — Luc Joosten',
     description:
-      'Release Log: a packaged TypeScript CLI for deterministic changelogs, reviewed release PRs and exact version tagging, with clear AI boundaries.',
+      'Rolling Release: a packaged TypeScript CLI for deterministic changelogs, reviewed release PRs and exact version tagging, with clear AI boundaries.',
   },
   ...projectCaseStudies.map(({ project }) => ({
     path: `/projects/${project.slug}`,

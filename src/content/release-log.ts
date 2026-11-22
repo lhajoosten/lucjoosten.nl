@@ -1,5 +1,5 @@
 export const releaseLog = {
-  title: 'Release Log',
+  title: 'Rolling Release',
   subtitle: 'From merged changes to a reviewed release.',
   introduction:
     'A GitHub-first TypeScript CLI for deterministic changelogs and release automation, packaged as a runnable container and used by the project itself.',

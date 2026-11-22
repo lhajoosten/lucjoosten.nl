@@ -53,7 +53,7 @@ test('projects retain reviewed status and expose case studies and public reposit
   ).not.toBeInTheDocument();
   expect(screen.getByText('Planning · documentation only')).toBeInTheDocument();
   expect(screen.getAllByText('Private · source unavailable')).toHaveLength(3);
-  expect(screen.getByRole('link', { name: 'Read the Release Log case study' })).toHaveAttribute(
+  expect(screen.getByRole('link', { name: 'Read the Rolling Release case study' })).toHaveAttribute(
     'href',
     '/projects/release-log',
   );
@@ -74,8 +74,8 @@ test('route changes update metadata, clear not-found directives and focus the de
       <Link to="/projects/missing">Unknown project</Link>
     </MemoryRouter>,
   );
-  await user.click(screen.getByRole('link', { name: 'Read the Release Log case study' }));
-  expect(document.title).toBe('Release Log — Luc Joosten');
+  await user.click(screen.getByRole('link', { name: 'Read the Rolling Release case study' }));
+  expect(document.title).toBe('Rolling Release — Luc Joosten');
   expect(document.querySelector('link[rel="canonical"]')).toHaveAttribute(
     'href',
     'https://lucjoosten.nl/projects/release-log',

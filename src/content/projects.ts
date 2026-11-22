@@ -14,12 +14,12 @@ export type Project = {
 export const projectCatalog = {
   'release-log': {
     slug: 'release-log',
-    title: 'Release Log',
+    title: 'Rolling Release',
     category: 'Developer tooling',
     summary:
       'A packaged TypeScript CLI for deterministic changelogs and reviewed release automation.',
     detail:
-      'Release Log captures Git/PR context, prepares a release PR and tags its reviewed merge. The project uses its own workflow and distributes a Linux/amd64 container. Deterministic changelogs work without AI; AI-written release notes remain planned.',
+      'Rolling Release captures Git/PR context, prepares a release PR and tags its reviewed merge. The project uses its own workflow and distributes a Linux/amd64 container. Deterministic changelogs work without AI; AI-written release notes remain planned.',
     status: 'Available · actively developed',
     tags: ['TypeScript', 'GitHub', 'Developer tooling'],
     diagram: 'release',
@@ -27,15 +27,15 @@ export const projectCatalog = {
   },
   'lint-action': {
     slug: 'lint-action',
-    title: 'Lint Action',
+    title: 'Lint Gate',
     category: 'Developer tooling',
     summary: 'A Rust CLI and GitHub Action that check cyclomatic complexity across four languages.',
     detail:
-      'Lint Action uses Tree-sitter to score callables in Rust, TypeScript, TSX and Python. Teams can report findings, enforce limits immediately or adopt a baseline for existing exceptions.',
+      'Lint Gate uses Tree-sitter to score callables in Rust, TypeScript, TSX and Python. Teams can report findings, enforce limits immediately or adopt a baseline for existing exceptions.',
     status: 'Implemented · CLI and GitHub Action',
     tags: ['Rust', 'Tree-sitter', 'GitHub Actions'],
     diagram: 'review',
-    repository: { visibility: 'public', url: 'https://github.com/lhajoosten/lint-action' },
+    repository: { visibility: 'public', url: 'https://github.com/lhajoosten/lint-gate' },
   },
   upkeep: {
     slug: 'upkeep',

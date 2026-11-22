@@ -14,7 +14,7 @@ const studies = {
         id: 'scoring',
         title: 'One scoring engine for local runs and CI',
         paragraphs: [
-          'Cyclomatic complexity measures decision paths within a callable. Lint Action parses Rust, TypeScript, TSX and Python with bundled Tree-sitter grammars. Language-specific adapters identify callables and decision points, while a shared analyzer applies the scoring rules. The local CLI and composite GitHub Action use that same engine.',
+          'Cyclomatic complexity measures decision paths within a callable. Lint Gate parses Rust, TypeScript, TSX and Python with bundled Tree-sitter grammars. Language-specific adapters identify callables and decision points, while a shared analyzer applies the scoring rules. The local CLI and composite GitHub Action use that same engine.',
           'A repository policy sets limits by language and selects paths with include and exclude globs. Scores equal to the configured limit pass. Findings identify the callable, its location, score, limit and disposition so a reviewer can find the code that triggered the check.',
         ],
       },
@@ -36,7 +36,7 @@ const studies = {
       },
     ],
     source: {
-      url: 'https://github.com/lhajoosten/lint-action/blob/a0be508341f2ac8001143cd13e729ae8579b0b1c/README.md',
+      url: 'https://github.com/lhajoosten/lint-gate/blob/a0be508341f2ac8001143cd13e729ae8579b0b1c/README.md',
       revision: 'a0be508341f2ac8001143cd13e729ae8579b0b1c',
       reviewed: '2026-11-21',
     },
