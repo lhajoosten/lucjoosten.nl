@@ -1,0 +1,4 @@
+{
+  "mode": "report-only",
+  "include": ["src/**/*.ts"]
+}
