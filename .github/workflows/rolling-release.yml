@@ -16,7 +16,7 @@ concurrency:
 
 jobs:
   release:
-    uses: lhajoosten/rolling-release/.github/workflows/consumer-release.yml@6a9a029fceea31a10fa5ecf5705535e9a02e8bfc
+    uses: lhajoosten/rolling-release/.github/workflows/consumer-release.yml@215ce3f9813f4159610442187656c614c5fd3b34
     with:
       release-branch: main
       app-id: ${{ vars.RELEASE_APP_ID }}
