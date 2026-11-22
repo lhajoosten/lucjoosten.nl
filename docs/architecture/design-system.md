@@ -18,7 +18,7 @@ Intentional changes from the prototype: accessible contrast for small blue text,
 
 ## Project pages — Phase 2 slice 1
 
-The projects index reuses the asymmetric card grid as semantic articles with explicit links, reviewed status and repository visibility. Homepage cards retain their native overview dialogs; the Release Log dialog adds a case-study link. The Projects header destination is `/projects`; other header destinations remain homepage anchors.
+The projects index reuses the asymmetric card grid as semantic articles with explicit links, reviewed status and repository visibility. Homepage cards retain their native overview dialogs; the Rolling Release dialog adds a case-study link. The Projects header destination is `/projects`; other header destinations remain homepage anchors.
 
 The case-study layout pairs an editorial title and project diagram, then a section navigation column and reading column capped at 720px. On mobile these stack into one column. Source attribution links to a pinned public README and records its review date. Reuse existing light/dark, focus and reduced-motion tokens. Client page transitions focus the destination heading; ordinary homepage and case-study anchors preserve native navigation.
 
