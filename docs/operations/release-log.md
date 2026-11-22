@@ -1,9 +1,9 @@
 # Changelog automation
 
-The workflow previews releases with `ghcr.io/lhajoosten/release-log:latest`
-using a repository-scoped read-only token. A separate SHA-pinned job recomputes
-the release using fresh GitHub evidence and receives its own write token. The
-preview passes no output or artifacts to the writer.
+The website calls one SHA-pinned Rolling Release workflow. The provider manages
+the writer revision and the trusted replay history. The workflow previews releases
+with `ghcr.io/lhajoosten/release-log:latest` using a repository-scoped read-only
+token. The separate writer verifies fresh GitHub evidence with its own token.
 
 When the App is configured, an ordinary PR merge into `main` runs
 capture and deterministic changelog generation. The bot maintains one release
@@ -61,6 +61,11 @@ Use a new merge event to verify workflow changes. A rerun uses the workflow
 revision from its original event. The CLI authenticates with the App installation
 token.
 
+Dispatch **Rolling Release** on `main` for a read-only preview at the captured
+commit. For the first run of a new workflow pin, pause merge writes, then compare
+the manual preview and the next ordinary merge preview with the previous caller.
+Enable writes after verifying the reviewed replay history.
+
 ## Recovery and upgrades
 
 For metadata or read failures, inspect diagnostics and rerun the relevant merge
@@ -71,6 +76,7 @@ deliberately closed proposals require human inspection before recovery.
 
 Set `RELEASE_LOG_WRITE_ENABLED` to `false` to disable future writes and keep
 previews. Inspect an in-progress run separately. The preview follows the latest
-stable image. To upgrade the writer, review the matching immutable workflow and
-tool SHA and keep the trusted replay runtimes needed by existing proposals.
-Preserve capture identities, bootstrap/onboarding boundaries and existing tags.
+stable image. Upgrade through a reviewed PR that changes the single workflow pin.
+Confirm the provider revision retains the trusted runtimes for existing proposals.
+To recover from a bad upgrade, restore the previous reviewed caller through a PR.
+Preserve capture identities, bootstrap/onboarding boundaries, and existing tags.
