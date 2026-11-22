@@ -5,7 +5,18 @@ const sha = /^[a-f0-9]{40}$/u;
 
 export function checkReleaseProposal(event, expectedBotId, repository = process.cwd()) {
   const pull = event.pull_request;
-  if (pull?.base?.ref !== 'main' || pull.head?.ref !== 'release-log/main') return;
+  if (pull?.base?.ref !== 'main') return;
+
+  const headRef = pull.head?.ref ?? '';
+  let seriesId;
+  if (headRef.startsWith('release-log-series/')) {
+    seriesId = /^release-log-series\/([a-z0-9]+(?:-[a-z0-9]+)*)\/main$/u.exec(headRef)?.[1];
+    if (!seriesId || seriesId.length > 40) {
+      throw new Error('The release proposal branch has an invalid series ID.');
+    }
+  } else if (headRef !== 'release-log/main') {
+    return;
+  }
 
   const repositoryId = event.repository?.id;
   if (
@@ -42,6 +53,7 @@ export function checkReleaseProposal(event, expectedBotId, repository = process.
   if (
     !identity ||
     identity.schemaVersion !== 1 ||
+    identity.seriesId !== seriesId ||
     identity.repositoryId !== repositoryId ||
     identity.releaseBranch !== pull.base.ref ||
     String(identity.botUserId) !== expectedBotId ||
